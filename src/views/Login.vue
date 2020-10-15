@@ -47,6 +47,10 @@
           class="helper-text invalid"
           >Пароль должен быть больше
           {{ $v.password.$params.minLength.min }}</small
+        ><small
+          v-else-if="error === 1"
+          class="helper-text invalid"
+          >Неверные логин или пароль</small
         >
       </div>
     </div>
@@ -73,11 +77,12 @@ export default {
   name: "Login",
   data: () => ({
     email: "",
-    password: ""
+    password: "",
+    error: 0
   }),
   validations: {
     email: { email, required },
-    password: { required, minLength: minLength(6) }
+    password: { required, minLength: minLength(1) }
   },
   methods: {
     async login() {
@@ -86,11 +91,20 @@ export default {
         return;
       }
       const formData = {
-        email: this.email,
+        login: this.email,
         password: this.password
       };
-      await this.$store.dispatch("login", formData);
-      this.$router.push("/");
+      const ok = await this.$store.dispatch("login", formData);
+      if(!ok){
+        this.error = 1
+        setTimeout(()=>{
+          this.error = 0
+        }, 2000)
+      }
+      else{
+        this.$router.push("/");
+      }
+
     }
   }
 };

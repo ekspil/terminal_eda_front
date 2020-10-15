@@ -12,10 +12,10 @@
       <div class="col s12 m6 l4">
         <div class="card light-blue bill-card">
           <div class="card-content white-text">
-            <span class="card-title">Счет в валюте</span>
+            <span class="card-title">План по ТО</span>
 
             <p class="currency-line">
-              <span>12.0 Р</span>
+              <span>2 000 000</span>
             </p>
           </div>
         </div>
@@ -25,22 +25,22 @@
         <div class="card orange darken-3 bill-card">
           <div class="card-content white-text">
             <div class="card-header">
-              <span class="card-title">Курс валют</span>
+              <span class="card-title">Текущие показатели</span>
             </div>
             <table>
               <thead>
                 <tr>
-                  <th>Валюта</th>
-                  <th>Курс</th>
-                  <th>Дата</th>
+                  <th>Ресторан</th>
+                  <th>Чеков</th>
+                  <th>Товарооборот</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
-                  <td>руб</td>
-                  <td>12121</td>
-                  <td>12.12.12</td>
+                  <td>РБ0</td>
+                  <td> 0 чеков</td>
+                  <td> 0 руб</td>
                 </tr>
               </tbody>
             </table>

@@ -4,32 +4,25 @@
       <h3>Заготовки</h3>
     </div>
 
-    <div class="history-chart">
-      <canvas></canvas>
-    </div>
 
-    <section>
+    <section v-if="items">
       <table>
         <thead>
           <tr>
             <th>#</th>
-            <th>Сумма</th>
-            <th>Дата</th>
             <th>Категория</th>
-            <th>Тип</th>
-            <th>Открыть</th>
+            <th>Время жизни</th>
+            <th>Минимальная партия</th>
+            <th>Редактировать</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>1212</td>
-            <td>12.12.32</td>
-            <td>name</td>
-            <td>
-              <span class="white-text badge red">Расход</span>
-            </td>
+          <tr v-for="item of items" :key="item.id">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.liveTime}}</td>
+            <td>{{item.minCount}}</td>
             <td>
               <button class="btn-small btn">
                 <i class="material-icons">open_in_new</i>
@@ -44,7 +37,15 @@
 
 <script>
 export default {
-  name: "Items"
+  name: "Items",
+  data: ()=>({
+    items: null
+  }),
+  methods: {
+  },
+  async mounted() {
+    this.items = await this.$store.dispatch("getAllItems", {})
+  }
 };
 </script>
 

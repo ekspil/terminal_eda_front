@@ -3,6 +3,11 @@
     <Navbar @closeNav="navOpen = !navOpen" />
     <Sidebar :navOpen="navOpen" />
 
+    <ModalProducts @close="modalProduct.close()"/>
+    <ModalItems @close="modalItem.close()"/>
+    <ModalUsers @close="modalUser.close()"/>
+    <ModalSmena @close="modalSmena.close()"/>
+
     <main class="app-content" :class="{ full: !navOpen }">
       <div class="app-page">
         <router-view />
@@ -10,12 +15,12 @@
     </main>
 
     <div v-if="$route.path != '/'" class="fixed-action-btn">
-      <router-link
+      <button
         class="btn-floating btn-large blue"
-        :to="'/add/' + $route.path"
+        @click="openModal()"
       >
         <i class="large material-icons">add</i>
-      </router-link>
+      </button>
     </div>
   </div>
 </template>
@@ -23,15 +28,46 @@
 <script>
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import ModalProducts from "@/components/ModalProduct"
+import ModalItems from "@/components/ModalItem"
+import ModalUsers from "@/components/ModalUser"
+import ModalSmena from "@/components/ModalSmena"
 export default {
   name: "MainLayout",
   data: () => ({
-    navOpen: true
+    navOpen: true,
+    modalProduct: null,
+    modalItem: null,
+    modalUser: null,
+    modalSmena: null,
   }),
   components: {
     Sidebar,
-    Navbar
-  }
+    Navbar,
+    ModalProducts,
+    ModalItems,
+    ModalUsers,
+    ModalSmena
+  },
+  mounted() {
+    this.modalProduct = window.M.Modal.init(document.querySelector('.modal-product'), {});
+    this.modalItem = window.M.Modal.init(document.querySelector('.modal-item'), {});
+    this.modalSmena = window.M.Modal.init(document.querySelector('.modal-smena'), {});
+    this.modalUser = window.M.Modal.init(document.querySelector('.modal-user'), {});
+  },
+  methods: {
+    openModal(){
+      if(this.$route.path.includes("Products")){
+        this.modalProduct.open()
+      }
+      if(this.$route.path.includes("Items")){
+        this.modalItem.open()
+      }
+      if(this.$route.path.includes("Users")){
+        this.modalUser.open()
+      }
+    }
+  },
 };
 </script>
 

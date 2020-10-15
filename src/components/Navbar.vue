@@ -16,7 +16,7 @@
             data-target="dropdown"
             ref="dropdown"
           >
-            USER NAME
+            {{$store.state.auth.user.name}}
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -49,7 +49,7 @@ export default {
   }),
   methods: {
     logout() {
-      console.log("Logout");
+      this.$store.commit('clearUserData')
       this.$router.push("/login?message=logout");
     }
   },

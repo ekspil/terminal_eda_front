@@ -1,11 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from '@/store';
 
 Vue.use(VueRouter);
 
 const routes = [
+  { path: '/', redirect: '/home' },
   {
-    path: "/",
+    path: "/home",
     name: "Home",
     meta: { layout: "main" },
     component: () => import(/* webpackChunkName: "about" */ "../views/Home.vue")
@@ -37,6 +39,20 @@ const routes = [
     meta: { layout: "empty" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Login.vue")
+  },
+  {
+    path: "/tabAdm",
+    name: "Table",
+    meta: { layout: "main" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Table.vue")
+  },
+  {
+    path: "/table",
+    name: "Table",
+    meta: { layout: "no" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Table.vue")
   }
 ];
 
@@ -45,5 +61,16 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+router.beforeEach((to, from, next) => {
+  let isSecured = !to.path.includes('/login')
+  let isTable = to.path.includes('/table')
+
+  const token = store.state.auth.user.token;
+  if (isSecured && !token && !isTable) {
+    return next('/login');
+  }
+  return next();
+})
 
 export default router;

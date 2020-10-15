@@ -4,32 +4,25 @@
       <h3>Продукты</h3>
     </div>
 
-    <div class="history-chart">
-      <canvas></canvas>
-    </div>
-
-    <section>
+    <section v-if="products">
       <table>
         <thead>
           <tr>
             <th>#</th>
-            <th>Сумма</th>
-            <th>Дата</th>
+            <th>Наименование</th>
             <th>Категория</th>
-            <th>Тип</th>
             <th>Открыть</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>1212</td>
-            <td>12.12.32</td>
-            <td>name</td>
+          <tr v-for="item of products" :key="item.id">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
             <td>
-              <span class="white-text badge red">Расход</span>
+              <span class="white-text badge red">{{item.groupId}}</span>
             </td>
+
             <td>
               <button class="btn-small btn">
                 <i class="material-icons">open_in_new</i>
@@ -43,8 +36,23 @@
 </template>
 
 <script>
+
 export default {
-  name: "Products"
+  name: "Products",
+  data: ()=>({
+    products: null
+  }),
+  methods: {
+  },
+  async mounted() {
+    this.products = await this.$store.dispatch("getAllProducts", {})
+
+    var elem = document.querySelector('.modal-product');
+    var instance = window.M.Modal.init(elem, {});
+    this.modal = instance
+
+
+  }
 };
 </script>
 

@@ -7,14 +7,34 @@ export default {
       token: null
     }
   },
+  mutations: {
+    setUserData(state, data) {
+      state.user.name = data.name;
+      state.user.token = data.id;
+    },
+    clearUserData(state) {
+      state.user.name = "NO USER";
+      state.user.token = null;
+    }
+  },
+
   actions: {
-    async login({ dispatch, commit }, { email, password }) {
-      try {
-        const result = await axios.get("https://reqres.in/api/users?page=2");
-        console.log(result);
-      } catch (e) {
-        console.log(dispatch, commit, email, password);
-        throw e;
+    async login({ commit }, { login, password }) {
+      const result = await axios.post(
+        "http://localhost:3000/api/terminal/users/auth",
+        {
+          login,
+          password
+        }
+      );
+      console.log(result);
+
+
+      if (result && result.data && result.data.id) {
+        commit("setUserData", result.data);
+        return true;
+      } else {
+        return false;
       }
     }
   }
