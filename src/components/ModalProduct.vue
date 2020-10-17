@@ -1,73 +1,91 @@
 <template>
-    <form class="card auth-card modal modal-product" id="modal-product" @submit.prevent="close()">
-        <div class="card-content">
-            <span class="card-title">Товар</span>
-            <div class="input-field">
-                <input
-                        id="email"
-                        type="text"
-                >
-                <label for="email">Email</label>
-                <small class="helper-text invalid">Email</small>
-            </div>
-            <div class="input-field">
-                <input
-                        id="password"
-                        type="password"
-                        class="validate"
-                >
-                <label for="password">Пароль</label>
-                <small class="helper-text invalid">Password</small>
-            </div>
-            <div class="input-field">
-                <input
-                        id="name"
-                        type="text"
-                        class="validate"
-                >
-                <label for="name">Имя</label>
-                <small class="helper-text invalid">Name</small>
-            </div>
-            <p>
-                <label>
-                    <input type="checkbox" />
-                    <span>С правилами согласен</span>
-                </label>
-            </p>
-        </div>
-        <div class="card-action">
-            <div>
-                <button
-                        class="btn waves-effect waves-light auth-submit"
-                        type="submit"
-                >
-                    Зарегистрироваться
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
-
-            <p class="center">
-                Уже есть аккаунт?
-                <a href="/">Войти!</a>
-            </p>
-        </div>
-    </form>
+  <form
+    class="card auth-card modal modal-product"
+    id="modal-product"
+    @submit.prevent="save()"
+  >
+    <div class="card-content">
+      <span class="card-title">Товар</span>
+      <div class="input-field">
+        <input
+          id="pname"
+          type="text"
+          v-model.trim="product.name"
+        />
+        <label for="pname">Наименование</label>
+        <small
+          v-if="false"
+          class="helper-text invalid"
+          >Должно быть заполнено</small
+        >
+      </div>
+      <div class="input-field">
+        <input
+          id="Station"
+          type="number"
+          class="validate"
+          v-model.trim="product.station"
+        />
+        <label for="Station">Станция</label>
+        <small
+          v-if="false"
+          class="helper-text invalid"
+          >Должно быть заполнено</small
+        >
+      </div>
+      <div class="input-field">
+        <select ref="selectprod" multiple v-model="product.items">
+          <option value="" disabled selected>Выберете нужные</option>
+          <option v-for="item of items" :key="item.id" :value="item.id">{{
+            item.name
+          }}</option>
+        </select>
+        <label>Добавить заготовку</label>
+      </div>
+    </div>
+    <div class="card-action">
+      <div>
+        <button class="btn waves-effect waves-light auth-submit" type="submit">
+          Сохранить
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+    </div>
+  </form>
 </template>
 
 <script>
-  export default {
-    name: "Modal",
-    data: ()=>({
-      modal: {}
-    }),
-    methods:{
-      close(){
-        this.$emit("close")
-      }
+
+export default {
+  name: "ModalP",
+  props: ["items", 'product'],
+  data: () => ({
+    modal: {},
+    select: null,
+
+  }),
+  methods: {
+    close() {
+      this.$emit("close");
     },
+    async save() {
+        const ok = await this.$store.dispatch("saveProduct", this.product);
+        if (ok) {
+          this.close()
+          return
+        }
+        return ok
+    }
+  },
+  async mounted() {
+    this.select = window.M.FormSelect.init(this.$refs.selectprod);
+    window.M.updateTextFields();
   }
+};
 </script>
 
 <style scoped>
-
+.modal-product {
+  overflow: visible;
+}
 </style>

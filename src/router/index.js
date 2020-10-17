@@ -42,7 +42,7 @@ const routes = [
   },
   {
     path: "/tabAdm",
-    name: "Table",
+    name: "TableAdmin",
     meta: { layout: "main" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Table.vue")
@@ -50,6 +50,13 @@ const routes = [
   {
     path: "/table",
     name: "Table",
+    meta: { layout: "no" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Table.vue")
+  },
+  {
+    path: "/table/:station",
+    name: "TableStation",
     meta: { layout: "no" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Table.vue")

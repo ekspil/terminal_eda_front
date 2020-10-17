@@ -6,6 +6,18 @@ import store from "./store";
 import "materialize-css/dist/js/materialize.min";
 import dateFilter from "@/filters/date.filter";
 import "./registerServiceWorker";
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:3000',
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  },
+  options: { path: "/io" } //Optional options
+}))
 
 Vue.filter("date", dateFilter);
 Vue.config.productionTip = false;
