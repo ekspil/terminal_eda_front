@@ -21,6 +21,18 @@
       </div>
       <div class="input-field">
         <input
+          type="text"
+          v-model.trim="product.code"
+        />
+        <label for="pname">Общий код</label>
+        <small
+          v-if="false"
+          class="helper-text invalid"
+          >Должно быть заполнено</small
+        >
+      </div>
+      <div class="input-field">
+        <input
           id="Station"
           type="number"
           class="validate"
