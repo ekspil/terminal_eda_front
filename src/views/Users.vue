@@ -59,6 +59,7 @@ export default {
     ModalUsers
   },
   data: () => ({
+    modalUser: null,
     users: null,
     user: {
       id: null,

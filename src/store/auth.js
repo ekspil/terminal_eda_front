@@ -27,7 +27,6 @@ export default {
           password
         }
       );
-      console.log(result);
 
 
       if (result && result.data && result.data.id) {

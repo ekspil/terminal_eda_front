@@ -4,7 +4,12 @@
       <h3>Продукты</h3>
     </div>
 
-    <ModalProduct v-if="items" @close="refresh()" :items="items" :product="product"/>
+    <ModalProduct
+      v-if="items && isOpen"
+      @close="refresh()"
+      :items="items"
+      :product="product"
+    />
 
     <section v-if="products">
       <table>
@@ -19,10 +24,10 @@
 
         <tbody>
           <tr v-for="item of products" :key="item.id">
-            <td>{{item.id}}</td>
-            <td>{{item.name}}</td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
             <td>
-              <span class="white-text badge red">{{item.station}}</span>
+              <span class="white-text badge red">{{ item.station }}</span>
             </td>
 
             <td>
@@ -35,11 +40,8 @@
       </table>
     </section>
 
-    <div  class="fixed-action-btn">
-      <button
-              class="btn-floating btn-large blue"
-              @click="openModal()"
-      >
+    <div class="fixed-action-btn">
+      <button class="btn-floating btn-large blue" @click="openModal()">
         <i class="large material-icons">add</i>
       </button>
     </div>
@@ -47,15 +49,16 @@
 </template>
 
 <script>
-import ModalProduct from "@/components/ModalProduct"
+import ModalProduct from "@/components/ModalProduct";
 export default {
   name: "Products",
-  components:{
+  components: {
     ModalProduct
   },
-  data: ()=>({
+  data: () => ({
     products: null,
     modalProduct: null,
+    isOpen: false,
     items: null,
     product: {
       id: null,
@@ -65,34 +68,40 @@ export default {
     }
   }),
   methods: {
-    openModal(p){
-      if(!p){
+    async openModal(p) {
+
+      if (!p) {
         this.product = {
           id: null,
-                  name: null,
-                  items: [],
-                  station: 1
-        }
+          name: null,
+          items: [],
+          station: 1
+        };
+      } else {
+        this.product = JSON.parse(JSON.stringify(p));
       }
-      else{
-        this.product = p
-      }
-      this.modalProduct = window.M.Modal.init(document.querySelector('.modal-product'), {});
-      this.modalProduct.open()
+      this.isOpen = true;
+      await this.$forceUpdate();
+      this.modalProduct = window.M.Modal.init(
+        document.querySelector(".modal-product"),
+        {}
+      );
+      this.modalProduct.open();
+      this.modalProduct.options.onCloseEnd = () => {
+        this.isOpen = false;
+      };
     },
-    async refresh(){
-      this.modalProduct.close()
-      this.products = await this.$store.dispatch("getAllProducts", {})
+    async refresh() {
+      this.modalProduct.close();
+      this.isOpen = false;
+      this.products = await this.$store.dispatch("getAllProducts", {});
     }
   },
   async beforeMount() {
-    this.items = await this.$store.dispatch("getAllItems", {})
+    this.items = await this.$store.dispatch("getAllItems", {});
   },
   async mounted() {
-    this.products = await this.$store.dispatch("getAllProducts", {})
-
-
-
+    this.products = await this.$store.dispatch("getAllProducts", {});
   }
 };
 </script>

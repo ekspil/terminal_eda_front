@@ -11,7 +11,7 @@
       </div>
     </main>
 
-    <div v-if="!($route.path == '/home' || $route.path == '/Products'|| $route.path == '/Items'|| $route.path == '/Users')" class="fixed-action-btn">
+    <div v-if="($route.path == '/home')" class="fixed-action-btn">
       <button
         class="btn-floating btn-large blue"
         @click="openModal()"

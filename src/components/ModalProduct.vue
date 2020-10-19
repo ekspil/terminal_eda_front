@@ -78,6 +78,7 @@ export default {
     }
   },
   async mounted() {
+
     this.select = window.M.FormSelect.init(this.$refs.selectprod);
     window.M.updateTextFields();
   }
