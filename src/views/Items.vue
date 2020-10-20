@@ -25,7 +25,7 @@
             <td>{{ item.liveTime }}</td>
             <td>{{ item.minCount }}</td>
             <td>
-              <button class="btn-small btn">
+              <button class="btn-small btn" @click="openModal(item)">
                 <i class="material-icons">open_in_new</i>
               </button>
             </td>

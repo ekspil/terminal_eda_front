@@ -35,7 +35,7 @@
             >
               <div v-for="(pos, index) of order.positions" :key="index">
                 <p>
-                  <span>{{ pos.count }} x </span><span>{{ pos.name }}</span>
+                  <span>{{ pos.count || 1}} x </span><span>{{ pos.name }}<sup>({{pos.station}})</sup></span>
                 </p>
                 <p v-for="(mod, index) of pos.mods" :key="index">
                   <small class="helper-text " style="margin-left: 10%;">

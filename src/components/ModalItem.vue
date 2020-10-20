@@ -27,7 +27,7 @@
       </div>
       <div class="input-field">
         <input id="timeToLive" type="text" class="validate" v-model="item.liveTime" />
-        <label for="timeToLive">Время жизни (сек)</label>
+        <label for="timeToLive">Время жизни (мин)</label>
         <small v-if="false" class="helper-text invalid">Время жизни</small>
       </div>
       <div class="input-field">

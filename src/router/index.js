@@ -60,6 +60,13 @@ const routes = [
     meta: { layout: "no" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Table.vue")
+  },
+  {
+    path: "/tableItems",
+    name: "TableItemStation",
+    meta: { layout: "no" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/TableItems.vue")
   }
 ];
 
