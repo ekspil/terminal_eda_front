@@ -7,10 +7,11 @@ import "materialize-css/dist/js/materialize.min";
 import dateFilter from "@/filters/date.filter";
 import "./registerServiceWorker";
 import VueSocketIO from 'vue-socket.io'
+const host = document.location.host.split(':')[0]
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'http://localhost:3000',
+  connection: 'http://'+host+':3000',
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
