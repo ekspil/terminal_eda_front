@@ -1,4 +1,5 @@
 import axios from "axios";
+const host = document.location.host.split(':')[0]
 
 export default {
   state: {
@@ -21,7 +22,7 @@ export default {
   actions: {
     async login({ commit }, { login, password }) {
       const result = await axios.post(
-        "http://localhost:3000/api/terminal/users/auth",
+        "http://"+host+":3000/api/terminal/users/auth",
         {
           login,
           password

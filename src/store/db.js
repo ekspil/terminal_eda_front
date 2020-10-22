@@ -1,4 +1,5 @@
 import axios from "axios";
+const host = document.location.host.split(':')[0]
 
 export default {
   state: {
@@ -21,7 +22,7 @@ export default {
   actions: {
     async getAllUsers({ dispatch, commit }, { password }) {
       try {
-        const result = await axios.get("http://localhost:3000/api/terminal/users/get");
+        const result = await axios.get("http://"+host+":3000/api/terminal/users/get");
         commit('setItems', result.data)
         return result.data
       } catch (e) {
@@ -31,7 +32,7 @@ export default {
     },
     async getAllItems({ dispatch, commit }, { password }) {
       try {
-        const result = await axios.get("http://localhost:3000/api/terminal/items/get");
+        const result = await axios.get("http://"+host+":3000/api/terminal/items/get");
         return result.data
       } catch (e) {
         console.log(dispatch, commit, password);
@@ -40,7 +41,7 @@ export default {
     },
     async getAllGroups({ dispatch, commit }, { password }) {
       try {
-        const result = await axios.get("http://localhost:3000/api/terminal/groups/get");
+        const result = await axios.get("http://"+host+":3000/api/terminal/groups/get");
         return result.data
       } catch (e) {
         console.log(dispatch, commit, password);
@@ -49,7 +50,7 @@ export default {
     },
     async getAllProducts({ dispatch, commit }, { password }) {
       try {
-        const result = await axios.get("http://localhost:3000/api/terminal/products/get");
+        const result = await axios.get("http://"+host+":3000/api/terminal/products/get");
         return result.data
       } catch (e) {
         console.log(dispatch, commit, password);
@@ -58,7 +59,7 @@ export default {
     },
     async saveProduct(store, data) {
       try {
-        await axios.post("http://localhost:3000/api/terminal/products/save", data);
+        await axios.post("http://"+host+":3000/api/terminal/products/save", data);
         return true
       } catch (e) {
         console.log(e);
@@ -67,7 +68,7 @@ export default {
     },
     async saveItem(store, data) {
       try {
-        await axios.post("http://localhost:3000/api/terminal/items/save", data);
+        await axios.post("http://"+host+":3000/api/terminal/items/save", data);
         return true
       } catch (e) {
         console.log(e);
@@ -76,7 +77,7 @@ export default {
     },
     async saveUser(store, data) {
       try {
-        await axios.post("http://localhost:3000/api/terminal/users/save", data);
+        await axios.post("http://"+host+":3000/api/terminal/users/save", data);
         return true
       } catch (e) {
         console.log(e);
