@@ -24,6 +24,7 @@ export default {
       { title: "Заготовки", url: "/Items" },
       { title: "Пользователи", url: "/Users" },
       { title: "Рабочий стол", url: "/tabAdm" },
+      { title: "Стол заготовок", url: "/tabAdmItems" },
     ]
   })
 };
