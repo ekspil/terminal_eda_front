@@ -81,6 +81,20 @@ const routes = [
     meta: { layout: "no" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/TableItems.vue")
+  },
+  {
+    path: "/admeo",
+    name: "Eo",
+    meta: { layout: "main" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Eo.vue")
+  },
+  {
+    path: "/eo",
+    name: "AdminEo",
+    meta: { layout: "no" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Eo.vue")
   }
 ];
 

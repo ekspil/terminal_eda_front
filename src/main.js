@@ -9,6 +9,11 @@ import "./registerServiceWorker";
 import VueSocketIO from 'vue-socket.io'
 const host = document.location.host.split(':')[0]
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/ru-RU'
+Vue.use(ElementUI, {locale});
+
 Vue.use(new VueSocketIO({
   debug: true,
   connection: 'http://'+host+':3000',

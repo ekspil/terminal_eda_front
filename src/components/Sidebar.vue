@@ -25,6 +25,7 @@ export default {
       { title: "Пользователи", url: "/Users" },
       { title: "Рабочий стол", url: "/tabAdm" },
       { title: "Стол заготовок", url: "/tabAdmItems" },
+      { title: "Экран гостя", url: "/admeo" },
     ]
   })
 };
