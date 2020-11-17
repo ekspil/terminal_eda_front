@@ -4,7 +4,7 @@
       <h3>Заготовки</h3>
     </div>
 
-    <ModalItems @close="refresh()" :item="item" />
+    <ModalItems @close="refresh()" :item="item" v-if="isOpen"/>
 
     <section v-if="items">
       <table>
@@ -50,6 +50,7 @@ export default {
     ModalItems
   },
   data: () => ({
+    isOpen: false,
     items: null,
     modalItem: null,
     item: {
@@ -61,7 +62,7 @@ export default {
     }
   }),
   methods: {
-    openModal(i) {
+    async openModal(i) {
       if (!i) {
         this.item = {
           id: null,
@@ -73,11 +74,16 @@ export default {
       } else {
         this.item = i;
       }
+      this.isOpen = true;
+      await this.$forceUpdate();
       this.modalItem = window.M.Modal.init(
         document.querySelector(".modal-item"),
         {}
       );
       this.modalItem.open();
+      this.modalItem.options.onCloseEnd = () => {
+        this.isOpen = false;
+      };
     },
     async refresh() {
       this.modalItem.close();

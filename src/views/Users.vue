@@ -5,7 +5,7 @@
     </div>
 
 
-    <ModalUsers @close="refresh()" :user="user"/>
+    <ModalUsers @close="refresh()" :user="user" v-if="isOpen"/>
 
     <section v-if="users">
       <table>
@@ -59,6 +59,7 @@ export default {
     ModalUsers
   },
   data: () => ({
+    isOpen: false,
     modalUser: null,
     users: null,
     user: {
@@ -70,7 +71,7 @@ export default {
     }
   }),
   methods: {
-    openModal(i) {
+    async openModal(i) {
       if (!i) {
         this.user = {
           id: null,
@@ -82,12 +83,18 @@ export default {
       } else {
         this.user = i;
       }
+      this.isOpen = true;
+
+      await this.$forceUpdate();
       this.modalUser = window.M.Modal.init(
         document.querySelector(".modal-user"),
         {}
       );
 
       this.modalUser.open();
+      this.modalUser.options.onCloseEnd = () => {
+        this.isOpen = false;
+      };
 
     },
     async refresh() {

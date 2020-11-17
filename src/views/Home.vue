@@ -2,7 +2,7 @@
   <div>
     <div class="page-title">
       <h3>Смена</h3>
-
+      <ModalSmena @close="refresh()" :smena="smena" v-if="isOpen"/>
       <button class="btn waves-effect waves-light btn-small">
         <i class="material-icons">refresh</i>
       </button>
@@ -15,7 +15,7 @@
             <span class="card-title">План по ТО</span>
 
             <p class="currency-line">
-              <span>2 000 000</span>
+              <span>{{smena.plan}}</span>
             </p>
           </div>
         </div>
@@ -48,12 +48,64 @@
         </div>
       </div>
     </div>
+
+    <div class="fixed-action-btn">
+      <button class="btn-floating btn-large blue" @click="openModal()">
+        <i class="large material-icons">add</i>
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import ModalSmena from "@/components/ModalSmena";
 export default {
-  name: "Home"
+  components: {
+    ModalSmena
+  },
+  name: "Home",
+  data: ()=>({
+    isOpen: false,
+    smena: {
+      plan: null
+    },
+    modalSmena: null,
+  }),
+  async mounted() {
+    this.smena = await this.$store.dispatch("getLastSmena" );
+  },
+  methods: {
+    async refresh() {
+      this.modalSmena.close();
+      this.smena = await this.$store.dispatch("getLastSmena", {});
+    },
+    async openModal(i) {
+      if (!i) {
+        this.user = {
+          id: null,
+          name: null,
+          login: null,
+          password: null,
+          role: null
+        };
+      } else {
+        this.user = i;
+      }
+      this.isOpen = true;
+
+      await this.$forceUpdate();
+      this.modalSmena = window.M.Modal.init(
+              document.querySelector(".modal-smena"),
+              {}
+      );
+
+      this.modalSmena.open();
+      this.modalSmena.options.onCloseEnd = () => {
+        this.isOpen = false;
+      };
+
+    }
+  }
 };
 </script>
 

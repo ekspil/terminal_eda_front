@@ -5,17 +5,20 @@ export default {
   state: {
     user: {
       name: "NO USER",
-      token: null
+      token: null,
+      id: null
     }
   },
   mutations: {
     setUserData(state, data) {
       state.user.name = data.name;
       state.user.token = data.id;
+      state.user.id = data.id;
     },
     clearUserData(state) {
       state.user.name = "NO USER";
       state.user.token = null;
+      state.user.id = null;
     }
   },
 

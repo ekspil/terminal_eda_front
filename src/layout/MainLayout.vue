@@ -3,7 +3,6 @@
     <Navbar @closeNav="navOpen = !navOpen" />
     <Sidebar :navOpen="navOpen" />
 
-    <ModalSmena @close="modalSmena.close()"/>
 
     <main class="app-content" :class="{ full: !navOpen }">
       <div class="app-page">
@@ -11,7 +10,7 @@
       </div>
     </main>
 
-    <div v-if="($route.path == '/home')" class="fixed-action-btn">
+    <div v-if="false" class="fixed-action-btn">
       <button
         class="btn-floating btn-large blue"
         @click="openModal()"
@@ -25,7 +24,6 @@
 <script>
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import ModalSmena from "@/components/ModalSmena"
 export default {
   name: "MainLayout",
   data: () => ({
@@ -35,12 +33,10 @@ export default {
   }),
   components: {
     Sidebar,
-    Navbar,
-    ModalSmena
+    Navbar
   },
   async mounted() {
 
-    this.modalSmena = window.M.Modal.init(document.querySelector('.modal-smena'), {});
   },
   methods: {
     async openModal(){

@@ -84,5 +84,23 @@ export default {
         return false
       }
     },
+    async saveSmena(store, data) {
+      try {
+        await axios.post("http://"+host+":3000/api/terminal/smena/save", data);
+        return true
+      } catch (e) {
+        console.log(e);
+        return false
+      }
+    },
+    async getLastSmena() {
+      try {
+        const smena = await axios.get("http://"+host+":3000/api/terminal/smena/get");
+        return smena.data
+      } catch (e) {
+        console.log(e);
+        return false
+      }
+    },
   }
 };

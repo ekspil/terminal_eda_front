@@ -56,6 +56,10 @@ export default {
   data: () => ({
     modal: {}
   }),
+  async mounted() {
+
+    window.M.updateTextFields();
+  },
   methods: {
     close() {
       this.$emit("close");
