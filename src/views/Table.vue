@@ -65,6 +65,8 @@
 
 <script>
   import OrderTime from '@/components/OrderTime'
+
+  import skdn from "@/filters/skdn"
 export default {
   name: "Home",
   components: {
@@ -87,6 +89,7 @@ export default {
         order.positions = order.positions.filter(
           pos => !this.station || pos.station == this.station
         );
+        order.positions = skdn(order.positions)
         return order;
       });
       return stationOrders.filter(order => order.positions.length > 0);
