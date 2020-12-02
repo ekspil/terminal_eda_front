@@ -15,6 +15,7 @@
             <th>Время жизни</th>
             <th>Минимальная партия</th>
             <th>Редактировать</th>
+            <th></th>
           </tr>
         </thead>
 
@@ -27,6 +28,12 @@
             <td>
               <button class="btn-small btn" @click="openModal(item)">
                 <i class="material-icons">open_in_new</i>
+              </button>
+            </td>
+
+            <td>
+              <button class="btn-small btn" @click="del(item)">
+                <i class="material-icons">delete</i>
               </button>
             </td>
           </tr>
@@ -62,6 +69,16 @@ export default {
     }
   }),
   methods: {
+
+    async del(item) {
+      item.action = "DELETE"
+      const ok = await this.$store.dispatch("saveItem", item);
+      if (ok) {
+        this.items = await this.$store.dispatch("getAllItems", {});
+        return
+      }
+      return ok
+    },
     async openModal(i) {
       if (!i) {
         this.item = {

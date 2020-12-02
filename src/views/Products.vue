@@ -20,6 +20,7 @@
             <th>Общий код</th>
             <th>Станция</th>
             <th>Открыть</th>
+            <th></th>
           </tr>
         </thead>
 
@@ -35,6 +36,12 @@
             <td>
               <button class="btn-small btn" @click="openModal(item)">
                 <i class="material-icons">open_in_new</i>
+              </button>
+            </td>
+
+            <td>
+              <button class="btn-small btn" @click="del(item)">
+                <i class="material-icons">delete</i>
               </button>
             </td>
           </tr>
@@ -71,6 +78,15 @@ export default {
     }
   }),
   methods: {
+    async del(item) {
+      item.action = "DELETE"
+      const ok = await this.$store.dispatch("saveProduct", item);
+      if (ok) {
+        this.products = await this.$store.dispatch("getAllProducts", {});
+        return
+      }
+      return ok
+    },
     async openModal(p) {
 
       if (!p) {

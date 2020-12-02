@@ -16,6 +16,7 @@
             <th>Логин</th>
             <th>Роль</th>
             <th>Редактировать</th>
+            <th></th>
           </tr>
         </thead>
 
@@ -37,6 +38,12 @@
             <td>
               <button class="btn-small btn" @click="openModal(us)">
                 <i class="material-icons">open_in_new</i>
+              </button>
+            </td>
+
+            <td>
+              <button class="btn-small btn" @click="del(us)">
+                <i class="material-icons">delete</i>
               </button>
             </td>
           </tr>
@@ -71,6 +78,15 @@ export default {
     }
   }),
   methods: {
+    async del(item) {
+      item.action = "DELETE"
+      const ok = await this.$store.dispatch("saveUser", item);
+      if (ok) {
+        this.users = await this.$store.dispatch("getAllUsers", {});
+        return;
+      }
+      return ok;
+    },
     async openModal(i) {
       if (!i) {
         this.user = {
