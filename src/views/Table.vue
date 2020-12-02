@@ -93,8 +93,8 @@ export default {
         return order;
       });
       return stationOrders.filter(order => {
-        if(Number(this.station)){
-          if(this.hidden.includes(order.id)) return false
+        if(this.station){
+          if(order.hidden.includes(this.station)) return false
                   }
         if (order.positions.length > 0) return true
 
@@ -103,26 +103,26 @@ export default {
   },
   data: () => ({
     station: null,
-    orders: [],
-    hidden: []
+    orders: []
   }),
   methods:{
     async nextState(order){
-      if(Number(this.station)){
-        this.hidden.push(order.id)
+      if(this.station){
+        order.hidden.push(this.station)
+        await this.$store.dispatch("updateOrder", order)
         return
       }
       if((order.payed && order.ready) || order.die){
         order.action="DELETE"
         await this.$store.dispatch("updateOrder", order)
+        return
       }
       if(order.payed && !order.ready){
         order.ready=1
         order.action="READY"
         await this.$store.dispatch("updateOrder", order)
+        return
       }
-
-      this.$socket.emit("fullCheck")
     }
   }
 };
