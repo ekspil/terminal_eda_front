@@ -74,7 +74,7 @@ export default {
   },
   mounted() {
     if (this.$route.params.station) {
-      this.station = this.$route.params.station;
+      this.station = Number(this.$route.params.station)
     }
     this.$store.dispatch('getOrders')
   },
@@ -92,16 +92,26 @@ export default {
         order.positions = skdn(order.positions)
         return order;
       });
-      return stationOrders.filter(order => order.positions.length > 0);
+      return stationOrders.filter(order => {
+        if(Number(this.station)){
+          if(this.hidden.includes(order.id)) return false
+                  }
+        if (order.positions.length > 0) return true
+
+      });
     }
   },
   data: () => ({
     station: null,
-    orders: []
+    orders: [],
+    hidden: []
   }),
   methods:{
     async nextState(order){
-
+      if(Number(this.station)){
+        this.hidden.push(order.id)
+        return
+      }
       if((order.payed && order.ready) || order.die){
         order.action="DELETE"
         await this.$store.dispatch("updateOrder", order)

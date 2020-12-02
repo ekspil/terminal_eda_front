@@ -123,7 +123,7 @@ export default {
   name: "Home",
   async mounted() {
     if (this.$route.params.station) {
-      this.station = this.$route.params.station;
+      this.station = Number(this.$route.params.station)
     }
     await this.$store.dispatch("getItems");
   },
