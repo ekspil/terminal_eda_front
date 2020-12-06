@@ -58,10 +58,8 @@
               'white-text': item.alarm || item.die
             }"
           >
-            <div class="card-title" style="text-align: center;">
-              <div class="inline" style="float: left;">{{ item.name }}</div>
-              <div class="inline ">{{ item.type }}</div>
-              <div class="inline" style="float: right;"></div>
+            <div class="card-title" style="text-align: center; overflow: hidden; max-height: 1.8em; line-height: 0.9">
+              <div class="inline">{{ item.name }}</div>
             </div>
             <div style="height: 150px; overflow-y: auto;" v-if="item.lot">
               <div v-for="(pos, posIndex) of item.lot" :key="posIndex">
