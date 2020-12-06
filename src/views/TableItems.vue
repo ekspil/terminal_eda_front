@@ -58,7 +58,7 @@
               'white-text': item.alarm || item.die
             }"
           >
-            <div class="card-title" style="text-align: center; overflow: hidden; max-height: 1.8em; line-height: 0.9">
+            <div class="card-title" style="text-align: center; overflow: hidden; height: 1.8em; line-height: 0.9">
               <div class="inline">{{ item.name }}</div>
             </div>
             <div style="height: 150px; overflow-y: auto;" v-if="item.lot">
