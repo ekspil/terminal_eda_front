@@ -33,6 +33,13 @@
       </div>
       <div class="input-field">
         <input
+          type="text"
+          v-model.trim="product.corner"
+        />
+        <label for="pname">Корнер</label>
+      </div>
+      <div class="input-field">
+        <input
           id="Station"
           type="number"
           class="validate"

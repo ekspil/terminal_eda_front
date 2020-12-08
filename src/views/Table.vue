@@ -7,26 +7,63 @@
         :key="index"
         @click="nextState(order)"
       >
-        <div class="card bill-card" :class="{
-          'amber lighten-5': ((order.type === 'IN' || order.type === 'OUT') && order.ready === 0 && order.payed === 0 && !order.die && !order.alarm ),
-          'red lighten-5': ((order.type === 'IN' || order.type === 'OUT') && order.ready === 0 && order.payed === 1 && !order.die && !order.alarm ),
-          'teal lighten-4': ((order.type === 'IN' || order.type === 'OUT') && order.ready === 1 && order.payed === 1 && !order.die ),
-          'purple lighten-4': ((order.type === 'APP_OUT' || order.type === 'APP_IN') && order.ready === 0 && order.payed === 1 && !order.die && !order.alarm ),
-          'blue lighten-4': ((order.type === 'APP_OUT' || order.type === 'APP_IN') && order.ready === 1 && order.payed === 1 && !order.die ),
-          'amber lighten-1': ((order.type === 'DELIVERY') && order.ready === 0 && order.payed === 1 && !order.die && !order.alarm ),
-          'light-green lighten-3': ((order.type === 'DELIVERY') && order.ready === 1 && order.payed === 1 && !order.die  ),
-          'orange darken-4': (order.alarm && !order.die && !order.ready),
-          'grey darken-3': (order.die),
-
-          }">
-          <div class="card-content " :class="{
-            'white-text': (order.alarm || order.die)
-          }">
+        <div
+          class="card bill-card"
+          :class="{
+            'amber lighten-5':
+              (order.type === 'IN' || order.type === 'OUT') &&
+              order.ready === 0 &&
+              order.payed === 0 &&
+              !order.die &&
+              !order.alarm,
+            'red lighten-5':
+              (order.type === 'IN' || order.type === 'OUT') &&
+              order.ready === 0 &&
+              order.payed === 1 &&
+              !order.die &&
+              !order.alarm,
+            'teal lighten-4':
+              (order.type === 'IN' || order.type === 'OUT') &&
+              order.ready === 1 &&
+              order.payed === 1 &&
+              !order.die,
+            'purple lighten-4':
+              (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
+              order.ready === 0 &&
+              order.payed === 1 &&
+              !order.die &&
+              !order.alarm,
+            'blue lighten-4':
+              (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
+              order.ready === 1 &&
+              order.payed === 1 &&
+              !order.die,
+            'amber lighten-1':
+              order.type === 'DELIVERY' &&
+              order.ready === 0 &&
+              order.payed === 1 &&
+              !order.die &&
+              !order.alarm,
+            'light-green lighten-3':
+              order.type === 'DELIVERY' &&
+              order.ready === 1 &&
+              order.payed === 1 &&
+              !order.die,
+            'orange darken-4': order.alarm && !order.die && !order.ready,
+            'grey darken-3': order.die
+          }"
+        >
+          <div
+            class="card-content "
+            :class="{
+              'white-text': order.alarm || order.die
+            }"
+          >
             <div class="card-title" style="text-align: center;">
               <div class="inline" style="float: left;">{{ order.id }}</div>
               <div class="inline ">{{ order.type }}</div>
               <div class="inline" style="float: right;">
-                <OrderTime :time="order"/>
+                <OrderTime :time="order" />
               </div>
             </div>
             <div
@@ -35,7 +72,10 @@
             >
               <div v-for="(pos, index) of order.positions" :key="index">
                 <p>
-                  <span>{{ pos.count || 1}} x </span><span>{{ pos.name }}<sup>({{pos.station}})</sup></span>
+                  <span>{{ pos.count || 1 }} x </span
+                  ><span
+                    >{{ pos.name }}<sup>({{ pos.station }})</sup></span
+                  >
                 </p>
                 <p v-for="(mod, index) of pos.mods" :key="index">
                   <small class="helper-text " style="margin-left: 10%;">
@@ -64,9 +104,9 @@
 </template>
 
 <script>
-  import OrderTime from '@/components/OrderTime'
+import OrderTime from "@/components/OrderTime";
 
-  import skdn from "@/filters/skdn"
+import skdn from "@/filters/skdn";
 export default {
   name: "Home",
   components: {
@@ -74,9 +114,12 @@ export default {
   },
   mounted() {
     if (this.$route.params.station) {
-      this.station = Number(this.$route.params.station)
+      this.station = Number(this.$route.params.station);
     }
-    this.$store.dispatch('getOrders')
+    if (this.$route.params.corner) {
+      this.corner = this.$route.params.corner;
+    }
+    this.$store.dispatch("getOrders");
   },
   sockets: {
     fullCheck(data) {
@@ -89,39 +132,47 @@ export default {
         order.positions = order.positions.filter(
           pos => !this.station || pos.station == this.station
         );
-        order.positions = skdn(order.positions)
+
+        if (this.corner && this.corner !== "ALL") {
+          order.positions = order.positions.filter(pos => {
+            if (pos.corner === this.corner) return true;
+            if (pos.corner === "ALL") return true;
+            return false
+          });
+        }
+        order.positions = skdn(order.positions);
         return order;
       });
       return stationOrders.filter(order => {
-        if(this.station){
-          if(order.hidden.includes(this.station)) return false
-                  }
-        if (order.positions.length > 0) return true
-
+        if (this.station) {
+          if (order.hidden.includes(this.station)) return false;
+        }
+        if (order.positions.length > 0) return true;
       });
     }
   },
   data: () => ({
     station: null,
+    corner: null,
     orders: []
   }),
-  methods:{
-    async nextState(order){
-      if(this.station){
-        order.hidden.push(this.station)
-        await this.$store.dispatch("updateOrder", order)
-        return
+  methods: {
+    async nextState(order) {
+      if (this.station) {
+        order.hidden.push(this.station);
+        await this.$store.dispatch("updateOrder", order);
+        return;
       }
-      if((order.payed && order.ready) || order.die){
-        order.action="DELETE"
-        await this.$store.dispatch("updateOrder", order)
-        return
+      if ((order.payed && order.ready) || order.die) {
+        order.action = "DELETE";
+        await this.$store.dispatch("updateOrder", order);
+        return;
       }
-      if(order.payed && !order.ready){
-        order.ready=1
-        order.action="READY"
-        await this.$store.dispatch("updateOrder", order)
-        return
+      if (order.payed && !order.ready) {
+        order.ready = 1;
+        order.action = "READY";
+        await this.$store.dispatch("updateOrder", order);
+        return;
       }
     }
   }

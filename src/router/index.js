@@ -55,7 +55,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Table.vue")
   },
   {
-    path: "/table/:station",
+    path: "/table/:corner/:station",
     name: "TableStation",
     meta: { layout: "no" },
     component: () =>

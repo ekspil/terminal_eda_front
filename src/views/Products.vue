@@ -18,6 +18,7 @@
             <th>#</th>
             <th>Наименование</th>
             <th>Общий код</th>
+            <th>Корнер</th>
             <th>Станция</th>
             <th>Открыть</th>
             <th></th>
@@ -29,6 +30,7 @@
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.code }}</td>
+            <td>{{ item.corner }}</td>
             <td>
               <span class="white-text badge red">{{ item.station }}</span>
             </td>
@@ -74,7 +76,8 @@ export default {
       name: null,
       items: [],
       station: 1,
-      code: null
+      code: null,
+      corner: "ALL"
     }
   }),
   methods: {
@@ -95,7 +98,8 @@ export default {
           name: null,
           items: [],
           station: 1,
-          code: null
+          code: null,
+          corner: "ALL"
         };
       } else {
         this.product = JSON.parse(JSON.stringify(p));
