@@ -13,27 +13,28 @@
       timer: new Date(0)
     }),
     watch: {
-      time: function (n) {
-            if(n.timeStart && !n.timeReady){
-
-              this.interval = setInterval(() => {
-                this.timer = (new Date().getTime() - n.timeStart);
-              }, 1000);
-            }else if(n.timeReady){
-              this.timer = (n.timeReady - n.timeStart);
-              clearInterval(this.interval);
-            }
-      }
+      // time: function (n) {
+      //       if(n.timeStart && !n.timeReady){
+      //
+      //         this.interval = setInterval(() => {
+      //           this.timer = (new Date().getTime() - n.timeStart);
+      //         }, 1000);
+      //       }else if(n.timeReady){
+      //         this.timer = (n.timeReady - n.timeStart);
+      //         clearInterval(this.interval);
+      //       }
+      // }
     },
     mounted() {
-      if(this.time && !this.time.timeReady){
-        this.interval = setInterval(() => {
+      this.interval = setInterval(() => {
+      if(this.time && this.time.timeStart &&  !this.time.timeReady){
           this.timer = (new Date().getTime() - this.time.timeStart);
-        }, 1000);
-      }else if(this.time.timeReady){
+
+      }else if(this.time.timeReady && this.time.timeStart){
         this.timer = (this.time.timeReady - this.time.timeStart);
         clearInterval(this.interval);
       }
+      }, 1000);
       },
     beforeDestroy() {
 
