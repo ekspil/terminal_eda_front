@@ -3,7 +3,7 @@
     <div class="row">
       <div
         v-for="(order, index) of filtredOrders"
-        class="col s12 m6 l4 xl3 padding-small"
+        class="col s6 m4 l3 xl2 padding-small"
         :key="index"
         @click="nextState(order)"
       >
