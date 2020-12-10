@@ -23,6 +23,15 @@ export default {
         throw e;
       }
     },
+    async updateOrderHidden({ dispatch, commit }, data) {
+      try {
+        const result = await axios.post("http://"+host+":3000/api/terminal/order/changeHidden", data);
+        return result.data
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
+    },
     async setReadyItem({ dispatch, commit }, data) {
       try {
         const result = await axios.post("http://"+host+":3000/api/terminal/order/setReadyItem", data);
