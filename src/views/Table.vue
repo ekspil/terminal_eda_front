@@ -159,8 +159,9 @@ export default {
   methods: {
     async nextState(order) {
       if (this.station) {
-        order.hidden.push(this.station)
+
         await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id});
+        order.hidden.push(this.station)
         return;
       }
       if ((order.payed && order.ready) || order.die) {
