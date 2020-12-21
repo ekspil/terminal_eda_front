@@ -84,14 +84,14 @@ const routes = [
   },
   {
     path: "/admeo",
-    name: "Eo",
+    name: "AdminEo",
     meta: { layout: "main" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Eo.vue")
   },
   {
-    path: "/eo",
-    name: "AdminEo",
+    path: "/eo/:corner",
+    name: "Eo",
     meta: { layout: "no" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Eo.vue")

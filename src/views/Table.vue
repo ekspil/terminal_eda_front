@@ -123,6 +123,19 @@ export default {
   },
   sockets: {
     fullCheck(data) {
+      if(this.corner && this.corner !== "ALL" && this.station == 0){
+        data = data.map(item => {
+          const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "READY")
+          if(!isR) return item
+          item.ready = 1
+          return item
+        })
+        data = data.filter(item => {
+          const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "DONE")
+          if(!isR) return true
+          return false
+        })
+      }
       this.orders = data;
     }
   },
@@ -158,6 +171,20 @@ export default {
   }),
   methods: {
     async nextState(order) {
+      if (this.station === 0 && this.corner ) {
+        const isReady = order.cornerReady.find(item => item.corner === this.corner && item.status === "READY")
+        if (isReady){
+          order.cornerReady.push({corner: this.corner, status: "DONE"})
+          order.hidden.push(this.station)
+          await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "DONE"});
+
+          return;
+        }
+        order.cornerReady.push({corner: this.corner, status: "READY"})
+        await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "READY"});
+
+        return;
+      }
       if (this.station) {
 
         await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id});
@@ -166,12 +193,21 @@ export default {
       }
       if ((order.payed && order.ready) || order.die) {
         order.action = "DELETE";
+        if(order.type === "APP_IN" || order.type === "APP_OUT"){
+          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "done"});
+        }
+        if(order.type === "DELIVERY" ){
+          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "sent"});
+        }
         await this.$store.dispatch("updateOrder", order);
         return;
       }
       if (order.payed && !order.ready) {
         order.ready = 1;
         order.action = "READY";
+        if(order.type === "APP_IN" || order.type === "APP_OUT" || order.type === "DELIVERY" ){
+          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "cooked"});
+        }
         await this.$store.dispatch("updateOrder", order);
         return;
       }
