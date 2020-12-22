@@ -160,6 +160,11 @@ export default {
         if (this.station) {
           if (order.hidden.includes(this.station)) return false;
         }
+        if(this.corner && this.corner != "ALL" && this.station === 0){
+
+          const isR = order.cornerReady.find(it => it.corner === this.corner && it.status === "DONE")
+          if(isR) return false
+        }
         if (order.positions.length > 0) return true;
       });
     }
@@ -171,16 +176,16 @@ export default {
   }),
   methods: {
     async nextState(order) {
-      if (this.station === 0 && this.corner ) {
-        const isReady = order.cornerReady.find(item => item.corner === this.corner && item.status === "READY")
-        if (isReady){
+      if (this.station === 0 && this.corner && this.corner !== "ALL") {
+        if (order.ready === 1){
+
           order.cornerReady.push({corner: this.corner, status: "DONE"})
-          order.hidden.push(this.station)
           await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "DONE"});
 
           return;
         }
         order.cornerReady.push({corner: this.corner, status: "READY"})
+        order.ready = 1
         await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "READY"});
 
         return;

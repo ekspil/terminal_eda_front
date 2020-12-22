@@ -78,26 +78,28 @@ export default {
     fullCheck(data) {
       if(this.corner && this.corner !== "ALL"){
         data = data.map(item => {
+          item.positions = item.positions.filter(pos => {
+            if (pos.corner === this.corner) return true;
+            if (pos.corner === "ALL") return true;
+            return false
+          })
+
+
           const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "READY")
           if(!isR) return item
           item.ready = 1
           return item
         })
+        data = data.filter(order => order.positions?.length > 0)
         data = data.filter(item => {
           const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "DONE")
           if(!isR) return true
           return false
         })
+
+
       }
 
-      if (this.corner && this.corner !== "ALL") {
-        data.positions = data.positions.filter(pos => {
-          if (pos.corner === this.corner) return true;
-          if (pos.corner === "ALL") return true;
-          return false
-        })
-        data = data.filter(order => order.positions?.length > 0)
-      }
 
       const nCount = data.filter(item =>item.ready === 1 && item.type !=="DELIVERY").length
       const oCount = this.orders.filter(item =>item.ready === 1 && item.type !=="DELIVERY").length
@@ -105,6 +107,7 @@ export default {
         this.sound.currentTime = 0
         this.sound.play()
       }
+
 
       this.orders = data;
 
