@@ -1,11 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from '@/store';
+import store from "@/store";
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', redirect: '/home' },
+  { path: "/", redirect: "/home" },
   {
     path: "/home",
     name: "Home",
@@ -86,15 +86,20 @@ const routes = [
     path: "/admeo",
     name: "AdminEo",
     meta: { layout: "main" },
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Eo.vue")
+    component: () => import(/* webpackChunkName: "about" */ "../views/Eo.vue")
   },
   {
     path: "/eo/:corner",
     name: "Eo",
     meta: { layout: "no" },
+    component: () => import(/* webpackChunkName: "about" */ "../views/Eo.vue")
+  },
+  {
+    path: "/kassa",
+    name: "Kassa",
+    meta: { layout: "no" },
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Eo.vue")
+      import(/* webpackChunkName: "about" */ "../views/Kassa.vue")
   }
 ];
 
@@ -105,14 +110,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  let isSecured = !to.path.includes('/login')
-  let isTable = to.path.includes('/table')
+  let isSecured = !to.path.includes("/login");
+  let isTable = to.path.includes("/table");
 
   const token = store.state.auth.user.token;
   if (isSecured && !token && !isTable) {
-    return next('/login');
+    return next("/login");
   }
   return next();
-})
+});
 
 export default router;
