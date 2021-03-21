@@ -2,15 +2,15 @@
   <div class="height100 background-color-dark">
     <div class="row height100">
       <!--      Main panel-->
-      <div class="col s8 height60 background-color-dark2 ">
+      <div class="col s8 height100 background-color-dark2 no-pad">
         <Postitons :bill="bill"></Postitons>
-        <Menu :menu="menu"></Menu>
+        <Menu :menu="menu" @addItem="addItem"></Menu>
       </div>
 
       <!--      Menu panel-->
 
-      <div class="col s4 height100 gr">
-        <Actions></Actions>
+      <div class="col s4 height100 gr" >
+        <Actions ></Actions>
       </div>
     </div>
   </div>
@@ -28,7 +28,11 @@ export default {
     Postitons,
     Menu
   },
-  mounted() {},
+  async mounted() {
+
+    this.menu = await this.$store.dispatch("getAllProducts", {});
+
+  },
   sockets: {},
   computed: {},
   data: () => ({
@@ -47,7 +51,36 @@ export default {
     },
     menu: []
   }),
-  methods: {}
+  methods: {
+    addItem(posId){
+      if(this.bill && this.bill.items){
+        let finded = 0
+        this.bill.items.map(item => {
+          if (item.id !== posId) return item
+          item.count++
+          finded = 1
+          return item
+        })
+        if(finded) return
+      }
+      const prod = this.menu.find(item => posId === item.id)
+
+      if(!prod) return
+      const pushed = {
+        count: 1,
+        name: prod.name,
+        price: prod.price,
+        id: prod.id
+      }
+      if(!pushed.price) pushed.price = 9999
+      this.bill.items.push(pushed)
+      setTimeout(function(){
+        const elem = document.getElementById('style-1')
+        elem.scrollTop = elem.scrollHeight
+      }, 0)
+
+    }
+  }
 };
 </script>
 
@@ -55,7 +88,9 @@ export default {
 .height100 {
   height: 100vh;
 }
-
+.no-pad {
+  padding: 0;
+}
 .height60 {
   height: 60vh;
   padding: 0;

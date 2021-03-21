@@ -27,7 +27,7 @@
         <div>Сумма</div>
       </div>
     </div>
-    <div class="scroll" id="style-1">
+    <div class="scroll " id="style-1">
       <div
         v-for="(item, index) of bill.items"
         class="row background-color-dark2 "
@@ -55,7 +55,7 @@
               <div></div>
             </div>
             <div class="col s5 left-align">
-              <div class="margin-left">{{ pos.name }}</div>
+              <div class="margin-left">- {{ pos.name }}</div>
             </div>
             <div class="col s2">
               <div></div>

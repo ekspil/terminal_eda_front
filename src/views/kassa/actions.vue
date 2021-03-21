@@ -2,47 +2,159 @@
   <div class="height100">
     <div class="row ">
       <div class="col s12">
-        <div class="card-panel hoverable  grey lighten-1 white-text ">666</div>
+        <div class="card-panel hoverable  grey lighten-1 white-text ">
+          {{ number }}
+        </div>
       </div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">1</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">2</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">3</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">4</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">5</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">6</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">7</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">8</div></div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">9</div></div>
       <div class="col s4">
-        <div class="card-panel grey hoverable grey-text text-lighten-3">Find</div>
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('1')"
+        >
+          1
+        </div>
       </div>
-      <div class="col s4"><div class="card-panel grey hoverable grey-text text-lighten-3">0</div></div>
       <div class="col s4">
-        <div class="card-panel grey hoverable grey-text text-lighten-3">Backsp</div>
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('2')"
+        >
+          2
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('3')"
+        >
+          3
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('4')"
+        >
+          4
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('5')"
+        >
+          5
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('6')"
+        >
+          6
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('7')"
+        >
+          7
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('8')"
+        >
+          8
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('9')"
+        >
+          9
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="find()"
+        >
+          Find
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('0')"
+        >
+          0
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="bksp()"
+        >
+          Del
+        </div>
       </div>
     </div>
     <div class="row ">
       <div class="col s6">
-        <div class="card-panel hoverable green darken-2">Сохранить</div>
+        <div class="card-panel hoverable green darken-2" @click="save()">
+          Сохранить
+        </div>
       </div>
       <div class="col s6">
-        <div class="card-panel hoverable orange darken-2">Очистить</div>
+        <div class="card-panel hoverable orange darken-2" @click="clear()">
+          Очистить
+        </div>
       </div>
     </div>
-<!--    <div class="row ">-->
-<!--      <div class="col s6">-->
-<!--        <div class="card-panel hoverable">s12 m6 l3</div>-->
-<!--      </div>-->
-<!--      <div class="col s6">-->
-<!--        <div class="card-panel hoverable">s12 m6 l3</div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="row ">
+      <div class="col s12">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="newOrder()"
+        >
+          Новый заказ
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "actions"
+  name: "actions",
+  data: () => ({
+    number: ""
+  }),
+  methods: {
+    click(num) {
+      this.number += num;
+    },
+    bksp() {
+      this.number = this.number.slice(0, -1);
+    },
+    clear() {
+      this.number = "";
+      this.$emit("clear");
+    },
+    save() {
+      this.$emit("save", this.number);
+    },
+    find() {
+      this.$emit("find", this.number);
+    },
+    newOrder() {
+      this.$emit("newOrder");
+    }
+  }
 };
 </script>
 
@@ -60,6 +172,7 @@ export default {
   font-size: 30px;
   font-weight: bold;
   padding: 12px;
+  height: 11vh;
 }
 .grey-text {
   font-size: 20px;
