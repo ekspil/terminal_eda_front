@@ -123,18 +123,22 @@ export default {
   },
   sockets: {
     fullCheck(data) {
-      if(this.corner && this.corner !== "ALL" && this.station == 0){
+      if (this.corner && this.corner !== "ALL" && this.station == 0) {
         data = data.map(item => {
-          const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "READY")
-          if(!isR) return item
-          item.ready = 1
-          return item
-        })
+          const isR = item.cornerReady.find(
+            it => it.corner === this.corner && it.status === "READY"
+          );
+          if (!isR) return item;
+          item.ready = 1;
+          return item;
+        });
         data = data.filter(item => {
-          const isR = item.cornerReady.find(it => it.corner === this.corner && it.status === "DONE")
-          if(!isR) return true
-          return false
-        })
+          const isR = item.cornerReady.find(
+            it => it.corner === this.corner && it.status === "DONE"
+          );
+          if (!isR) return true;
+          return false;
+        });
       }
       this.orders = data;
     }
@@ -150,7 +154,7 @@ export default {
           order.positions = order.positions.filter(pos => {
             if (pos.corner === this.corner) return true;
             if (pos.corner === "ALL") return true;
-            return false
+            return false;
           });
         }
         order.positions = skdn(order.positions);
@@ -160,10 +164,11 @@ export default {
         if (this.station) {
           if (order.hidden.includes(this.station)) return false;
         }
-        if(this.corner && this.corner != "ALL" && this.station === 0){
-
-          const isR = order.cornerReady.find(it => it.corner === this.corner && it.status === "DONE")
-          if(isR) return false
+        if (this.corner && this.corner != "ALL" && this.station === 0) {
+          const isR = order.cornerReady.find(
+            it => it.corner === this.corner && it.status === "DONE"
+          );
+          if (isR) return false;
         }
         if (order.positions.length > 0) return true;
       });
@@ -177,32 +182,60 @@ export default {
   methods: {
     async nextState(order) {
       if (this.station === 0 && this.corner && this.corner !== "ALL") {
-        if (order.ready === 1){
-
-          order.cornerReady.push({corner: this.corner, status: "DONE"})
-          await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "DONE"});
+        if (order.ready === 1) {
+          order.cornerReady.push({ corner: this.corner, status: "DONE" });
+          await this.$store.dispatch("updateOrderHidden", {
+            station: this.station,
+            orderId: order.id,
+            corner: this.corner,
+            status: "DONE"
+          });
+          if (order.type === "APP_OUT") {
+            await this.$store.dispatch("sendStatus", {
+              orderId: order.id,
+              status: "done"
+            });
+          }
 
           return;
         }
-        order.cornerReady.push({corner: this.corner, status: "READY"})
-        order.ready = 1
-        await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id, corner: this.corner, status: "READY"});
-
+        order.cornerReady.push({ corner: this.corner, status: "READY" });
+        order.ready = 1;
+        await this.$store.dispatch("updateOrderHidden", {
+          station: this.station,
+          orderId: order.id,
+          corner: this.corner,
+          status: "READY"
+        });
+        if (order.type === "APP_OUT") {
+          await this.$store.dispatch("sendStatus", {
+            orderId: order.id,
+            status: "cooked"
+          });
+        }
         return;
       }
       if (this.station) {
-
-        await this.$store.dispatch("updateOrderHidden", {station: this.station, orderId: order.id});
-        order.hidden.push(this.station)
+        await this.$store.dispatch("updateOrderHidden", {
+          station: this.station,
+          orderId: order.id
+        });
+        order.hidden.push(this.station);
         return;
       }
       if ((order.payed && order.ready) || order.die) {
         order.action = "DELETE";
-        if(order.type === "APP_IN" || order.type === "APP_OUT"){
-          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "done"});
+        if (order.type === "APP_IN" || order.type === "APP_OUT") {
+          await this.$store.dispatch("sendStatus", {
+            orderId: order.id,
+            status: "done"
+          });
         }
-        if(order.type === "DELIVERY" ){
-          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "sent"});
+        if (order.type === "DELIVERY") {
+          await this.$store.dispatch("sendStatus", {
+            orderId: order.id,
+            status: "sent"
+          });
         }
         await this.$store.dispatch("updateOrder", order);
         return;
@@ -210,8 +243,15 @@ export default {
       if (order.payed && !order.ready) {
         order.ready = 1;
         order.action = "READY";
-        if(order.type === "APP_IN" || order.type === "APP_OUT" || order.type === "DELIVERY" ){
-          await this.$store.dispatch("sendStatus", {orderId: order.id, status: "cooked"});
+        if (
+          order.type === "APP_IN" ||
+          order.type === "APP_OUT" ||
+          order.type === "DELIVERY"
+        ) {
+          await this.$store.dispatch("sendStatus", {
+            orderId: order.id,
+            status: "cooked"
+          });
         }
         await this.$store.dispatch("updateOrder", order);
         return;
