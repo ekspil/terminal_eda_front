@@ -118,21 +118,21 @@ export default {
       if (this.bill && this.bill.items) {
         let finded = 0;
         this.bill.items.map(item => {
-          if (item.id !== posId) return item;
+          if (item.code !== posId) return item;
           item.count++;
           finded = 1;
           return item;
         });
         if (finded) return;
       }
-      const prod = this.menu.find(item => posId === item.id);
+      const prod = this.menu.find(item => posId === item.code);
 
       if (!prod) return;
       const pushed = {
         count: 1,
         name: prod.name,
         price: prod.price,
-        id: prod.id
+        code: prod.code
       };
       if (!pushed.price) pushed.price = 9999;
       this.bill.items.push(pushed);

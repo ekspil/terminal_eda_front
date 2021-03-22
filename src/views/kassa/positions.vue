@@ -32,9 +32,9 @@
         v-for="(item, index) of bill.items"
         class="row background-color-dark2 "
         :key="index"
-        @click="selectedString = item.id"
+        @click="selectedString = item.code"
         :class="{
-          'selected': item.id === selectedString
+          'selected': item.code === selectedString
         }"
       >
         <div class="col s1">

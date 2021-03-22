@@ -1,7 +1,7 @@
 <template>
   <div class="row height40 scroll" id="style-1">
     <div class="col s3" v-for="(item, index) of menu" :key="index">
-      <div class="card-panel grey hoverable white-text" @click="add(item.id)">{{ item.name }}</div>
+      <div class="card-panel grey hoverable white-text" @click="add(item.code)">{{ item.name }}</div>
     </div>
   </div>
 </template>
