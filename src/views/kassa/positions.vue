@@ -3,11 +3,11 @@
     <div class="row background-color-dark1">
       <div class="col s8">
         <div>Рейс</div>
-        <div class="text-size-large">666</div>
+        <div class="text-size-large">{{ bill.route }}</div>
       </div>
       <div class="col s4">
         <div>К оплате</div>
-        <div class="text-size-large">555,55</div>
+        <div class="text-size-large">{{ sum }}</div>
       </div>
     </div>
     <div class="row background-color-dark2-header">
@@ -32,6 +32,10 @@
         v-for="(item, index) of bill.items"
         class="row background-color-dark2 "
         :key="index"
+        @click="selectedString = item.id"
+        :class="{
+          'selected': item.id === selectedString
+        }"
       >
         <div class="col s1">
           <div>{{ index + 1 }}</div>
@@ -49,8 +53,11 @@
           <div>{{ item.count * item.price }}</div>
         </div>
         <div v-if="item.positions" class="col s12 row no-margin-bottom">
-          <div class="row no-margin-bottom" v-for="(pos, index) of item.positions"  :key="index" >
-
+          <div
+            class="row no-margin-bottom"
+            v-for="(pos, index) of item.positions"
+            :key="index"
+          >
             <div class="col s1">
               <div></div>
             </div>
@@ -67,7 +74,6 @@
               <div></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -83,6 +89,16 @@ export default {
       default: () => {
         return { items: [] };
       }
+    }
+  },
+  data: () => ({
+    selectedString: null
+  }),
+  computed: {
+    sum() {
+      return this.bill.items.reduce((acc, item) => {
+        return (acc += item.count * item.price);
+      }, 0);
     }
   }
 };
@@ -109,7 +125,12 @@ export default {
 }
 .background-color-dark2 {
   background-color: #595b5d;
-  padding: 0;
+  padding: 5px;
+  margin-bottom: 0;
+}
+.selected {
+  background-color: #727777;
+  padding: 5px;
 }
 .scroll {
   overflow-y: auto;
