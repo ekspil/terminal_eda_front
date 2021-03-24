@@ -3,8 +3,13 @@
     <div class="row height100">
       <!--      Main panel-->
       <div class="col s8 height100 background-color-dark2 no-pad">
-        <Postitons :bill="bill"></Postitons>
-        <Menu :menu="menu" @addItem="addItem"></Menu>
+        <Postitons :bill="bill" @setString="setString"></Postitons>
+        <Menu
+          v-if="menu && groups"
+          :products="menu"
+          :groups="groups"
+          @addItem="addItem"
+        ></Menu>
       </div>
 
       <!--      Menu panel-->
@@ -12,6 +17,9 @@
       <div class="col s4 height100 gr">
         <Actions
           @clear="clear()"
+          @deleteString="deleteString()"
+          @minusString="minusString"
+          @plusString="plusString"
           @newOrder="newOrder()"
           @save="save()"
           @find="find"
@@ -38,12 +46,19 @@ export default {
   },
   async mounted() {
     this.menu = await this.$store.dispatch("getAllProducts", {});
+    const groups = await this.$store.dispatch("getAllGroups", {});
+    this.groups = groups.map(i => {
+      i.group = true;
+      return i;
+    });
   },
   sockets: {},
   computed: {},
   data: () => ({
     modal: null,
     confirm: 0,
+    groups: null,
+    selectedString: "",
     bill: {
       items: [
         {
@@ -91,6 +106,37 @@ export default {
     menu: []
   }),
   methods: {
+    deleteString() {
+      if (!this.selectedString) return;
+      this.bill.items = this.bill.items.filter(
+        i => i.code !== this.selectedString
+      );
+    },
+    plusString() {
+      if (!this.selectedString) return;
+      this.bill.items = this.bill.items.map(i => {
+        if (i.code == this.selectedString) i.count++;
+        return i;
+      });
+    },
+    minusString() {
+      if (!this.selectedString) return;
+      let ds = false;
+      this.bill.items = this.bill.items.map(i => {
+        if (i.code == this.selectedString) i.count--;
+        if (i.count === 0) ds = true;
+        return i;
+      });
+      if (ds) {
+        this.bill.items = this.bill.items.filter(
+          i => i.code !== this.selectedString
+        );
+        this.selectedString = null
+      }
+    },
+    setString(string) {
+      this.selectedString = string;
+    },
     async newOrder() {
       if (this.bill.route) return;
       this.clear();
@@ -99,13 +145,12 @@ export default {
     },
     async save() {
       const result = await this.$store.dispatch("updateOrderKassa", this.bill);
-      console.log(result);
+      console.log(result)
       this.clear();
     },
     async find(number) {
       const result = await this.$store.dispatch("findOrderKassa", number);
-      console.log(result);
-      this.bill = result
+      this.bill = result;
     },
     clear() {
       this.bill = {
@@ -113,6 +158,7 @@ export default {
         route: null,
         type: null
       };
+      this.selectedString = "";
     },
     addItem(posId) {
       if (this.bill && this.bill.items) {

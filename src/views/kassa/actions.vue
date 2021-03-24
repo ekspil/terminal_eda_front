@@ -99,6 +99,31 @@
           class="card-panel grey hoverable grey-text text-lighten-3"
           @click="bksp()"
         >
+          Bksp
+        </div>
+      </div>
+
+      <div class="col s4 margin-top">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="plus"
+        >
+          +
+        </div>
+      </div>
+      <div class="col s4 margin-top">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="minus"
+        >
+          -
+        </div>
+      </div>
+      <div class="col s4 margin-top">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="del()"
+        >
           Del
         </div>
       </div>
@@ -134,12 +159,22 @@ export default {
   data: () => ({
     number: ""
   }),
+
   methods: {
     click(num) {
       this.number += num;
     },
     bksp() {
       this.number = this.number.slice(0, -1);
+    },
+    del() {
+      this.$emit("deleteString");
+    },
+    minus() {
+      this.$emit("minusString");
+    },
+    plus() {
+      this.$emit("plusString");
     },
     clear() {
       this.number = "";
@@ -167,6 +202,9 @@ export default {
   margin: 3px;
   border: 0;
   text-align: center;
+}
+.margin-top {
+  margin-top: 30px;
 }
 .white-text {
   font-size: 30px;

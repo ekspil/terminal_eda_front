@@ -7,35 +7,21 @@
     <div class="card-content">
       <span class="card-title">Товар</span>
       <div class="input-field">
-        <input
-          id="pname"
-          type="text"
-          v-model.trim="product.name"
-        />
+        <input id="pname" type="text" v-model.trim="product.name" />
         <label for="pname">Наименование</label>
-        <small
-          v-if="false"
-          class="helper-text invalid"
+        <small v-if="false" class="helper-text invalid"
           >Должно быть заполнено</small
         >
       </div>
       <div class="input-field">
-        <input
-          type="text"
-          v-model.trim="product.code"
-        />
+        <input type="text" v-model.trim="product.code" />
         <label for="pname">Общий код</label>
-        <small
-          v-if="false"
-          class="helper-text invalid"
+        <small v-if="false" class="helper-text invalid"
           >Должно быть заполнено</small
         >
       </div>
       <div class="input-field">
-        <input
-          type="text"
-          v-model.trim="product.corner"
-        />
+        <input type="text" v-model.trim="product.corner" />
         <label for="pname">Корнер</label>
       </div>
       <div class="input-field">
@@ -46,9 +32,7 @@
           v-model.trim="product.station"
         />
         <label for="Station">Станция</label>
-        <small
-          v-if="false"
-          class="helper-text invalid"
+        <small v-if="false" class="helper-text invalid"
           >Должно быть заполнено</small
         >
       </div>
@@ -60,6 +44,16 @@
           }}</option>
         </select>
         <label>Добавить заготовку</label>
+      </div>
+
+      <div class="input-field">
+        <select ref="selectgroup" v-model="product.group_id">
+          <option value="" disabled selected>Выберете нужную группу</option>
+          <option v-for="item of groups" :key="item.id" :value="item.id">{{
+            item.name
+          }}</option>
+        </select>
+        <label>Группа</label>
       </div>
     </div>
     <div class="card-action">
@@ -74,31 +68,30 @@
 </template>
 
 <script>
-
 export default {
   name: "ModalP",
-  props: ["items", 'product'],
+  props: ["items", "product", "groups"],
   data: () => ({
     modal: {},
     select: null,
-
+    select2: null
   }),
   methods: {
     close() {
       this.$emit("close");
     },
     async save() {
-        const ok = await this.$store.dispatch("saveProduct", this.product);
-        if (ok) {
-          this.close()
-          return
-        }
-        return ok
+      const ok = await this.$store.dispatch("saveProduct", this.product);
+      if (ok) {
+        this.close();
+        return;
+      }
+      return ok;
     }
   },
   async mounted() {
-
     this.select = window.M.FormSelect.init(this.$refs.selectprod);
+    this.select2 = window.M.FormSelect.init(this.$refs.selectgroup);
     window.M.updateTextFields();
   }
 };

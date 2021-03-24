@@ -32,9 +32,9 @@
         v-for="(item, index) of bill.items"
         class="row background-color-dark2 "
         :key="index"
-        @click="selectedString = item.code"
+        @click="select(item)"
         :class="{
-          'selected': item.code === selectedString
+          selected: item.code === selectedString
         }"
       >
         <div class="col s1">
@@ -99,6 +99,17 @@ export default {
       return this.bill.items.reduce((acc, item) => {
         return (acc += item.count * item.price);
       }, 0);
+    }
+  },
+  methods: {
+    select(item) {
+      if (this.selectedString === item.code) {
+        this.selectedString = null;
+        this.$emit("setString", this.selectedString);
+        return;
+      }
+      this.selectedString = item.code;
+      this.$emit("setString", this.selectedString);
     }
   }
 };

@@ -1,7 +1,14 @@
 <template>
   <div class="row height40 scroll" id="style-1">
+    <div class="col s3" v-if="selectedGroup" >
+      <div class="card-panel orange lighten-2 hoverable white-text" @click="back()">
+        Назад
+      </div>
+    </div>
     <div class="col s3" v-for="(item, index) of menu" :key="index">
-      <div class="card-panel grey hoverable white-text" @click="add(item.code)">{{ item.name }}</div>
+      <div class="card-panel grey hoverable white-text" @click="add(item)">
+        {{ item.name }}
+      </div>
     </div>
   </div>
 </template>
@@ -10,16 +17,51 @@
 export default {
   name: "positions",
   props: {
-    menu: {
+    products: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    },
+    groups: {
       type: Array,
       default: () => {
         return [];
       }
     }
   },
+  data: () => ({
+    level: 1,
+    selectedGroup: null,
+  }),
   methods: {
-    add(id){
-      this.$emit("addItem", id)
+    back(){
+      this.selectedGroup = null
+    },
+    add(item) {
+      if(item.group){
+        this.selectedGroup = item.id
+        return
+      }
+      this.$emit("addItem", item.code);
+    }
+  },
+  computed: {
+    menu(){
+      const filtredProducts = this.products.filter(prod => {
+        if(prod.corner === this.$route.params.corner) return true
+        return false
+      })
+      if(!this.selectedGroup){
+        return this.groups.filter(group => {
+          const p = filtredProducts.find( i => i.group_id === group.id)
+          if(!p) return false
+          return true
+        })
+      }
+      else {
+        return filtredProducts.filter(p => p.group_id === this.selectedGroup)
+      }
     }
   }
 };

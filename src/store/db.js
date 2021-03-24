@@ -66,6 +66,15 @@ export default {
         return false
       }
     },
+    async saveGroup(store, data) {
+      try {
+        await axios.post("http://"+host+":3000/api/terminal/groups/save", data);
+        return true
+      } catch (e) {
+        console.log(e);
+        return false
+      }
+    },
     async saveItem(store, data) {
       try {
         await axios.post("http://"+host+":3000/api/terminal/items/save", data);

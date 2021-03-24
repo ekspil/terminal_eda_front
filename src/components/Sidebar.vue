@@ -20,12 +20,14 @@ export default {
   data: () => ({
     links: [
       { title: "Смена", url: "/", exact: true },
+      { title: "Группы товаров", url: "/groups" },
       { title: "Товары", url: "/Products" },
       { title: "Заготовки", url: "/Items" },
       { title: "Пользователи", url: "/Users" },
       { title: "Рабочий стол", url: "/tabAdm" },
       { title: "Стол заготовок", url: "/tabAdmItems" },
       { title: "Экран гостя", url: "/admeo" },
+
     ]
   })
 };

@@ -5,13 +5,14 @@
     </div>
 
     <ModalProduct
-      v-if="items && isOpen"
+      v-if="items && groups && isOpen"
       @close="refresh()"
       :items="items"
+      :groups="groups"
       :product="product"
     />
 
-    <section v-if="products">
+    <section v-if="products && groups">
       <table>
         <thead>
           <tr>
@@ -20,6 +21,7 @@
             <th>Общий код</th>
             <th>Корнер</th>
             <th>Станция</th>
+            <th>Группа</th>
             <th>Открыть</th>
             <th></th>
           </tr>
@@ -35,6 +37,7 @@
               <span class="white-text badge red">{{ item.station }}</span>
             </td>
 
+            <td>{{ groupName(item.group_id) }}</td>
             <td>
               <button class="btn-small btn" @click="openModal(item)">
                 <i class="material-icons">open_in_new</i>
@@ -71,6 +74,7 @@ export default {
     modalProduct: null,
     isOpen: false,
     items: null,
+    groups: null,
     product: {
       id: null,
       name: null,
@@ -80,7 +84,14 @@ export default {
       corner: "ALL"
     }
   }),
+
   methods: {
+
+    groupName(id){
+      const gr = this.groups.find(it => it.id === id)
+      if(!gr) return ""
+      return gr.name
+    },
     async del(item) {
       item.action = "DELETE"
       const ok = await this.$store.dispatch("saveProduct", item);
@@ -126,6 +137,7 @@ export default {
   },
   async mounted() {
     this.products = await this.$store.dispatch("getAllProducts", {});
+    this.groups = await this.$store.dispatch("getAllGroups", {});
   }
 };
 </script>

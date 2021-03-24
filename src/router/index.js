@@ -27,6 +27,13 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Items.vue")
   },
   {
+    path: "/groups",
+    name: "Groups",
+    meta: { layout: "main" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Groups.vue")
+  },
+  {
     path: "/users",
     name: "Users",
     meta: { layout: "main" },
@@ -95,7 +102,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "../views/Eo.vue")
   },
   {
-    path: "/kassa",
+    path: "/kassa/:corner",
     name: "Kassa",
     meta: { layout: "no" },
     component: () =>
