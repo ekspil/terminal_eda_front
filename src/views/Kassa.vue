@@ -144,13 +144,13 @@ export default {
       this.bill.route = result.route;
     },
     async save() {
-      const result = await this.$store.dispatch("updateOrderKassa", this.bill);
-      console.log(result)
-      this.clear();
+      await this.$store.dispatch("updateOrderKassa", this.bill);
+      this.clear()
     },
     async find(number) {
       const result = await this.$store.dispatch("findOrderKassa", number);
-      this.bill = result;
+      console.log(result)
+      this.bill = result
     },
     clear() {
       this.bill = {
@@ -161,6 +161,10 @@ export default {
       this.selectedString = "";
     },
     addItem(posId) {
+      if(!this.bill || !this.bill.route) {
+        alert("Не выбран маршрут!")
+        return
+      }
       if (this.bill && this.bill.items) {
         let finded = 0;
         this.bill.items.map(item => {
