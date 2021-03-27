@@ -183,7 +183,12 @@ export default {
     async nextState(order) {
       if (this.station === 0 && this.corner && this.corner !== "ALL") {
         if (order.ready === 1) {
-          order.cornerReady.push({ corner: this.corner, status: "DONE" });
+          order.cornerReady.map(i => {
+            if(i.corner === this.corner) {
+              i.status = "DONE"
+            }
+            return i
+          });
           await this.$store.dispatch("updateOrderHidden", {
             station: this.station,
             orderId: order.id,
@@ -199,7 +204,12 @@ export default {
 
           return;
         }
-        order.cornerReady.push({ corner: this.corner, status: "READY" });
+        order.cornerReady.map(i => {
+          if(i.corner === this.corner) {
+            i.status = "READY"
+          }
+          return i
+        });
         order.ready = 1;
         await this.$store.dispatch("updateOrderHidden", {
           station: this.station,

@@ -142,6 +142,8 @@ export default {
       this.clear();
       const result = await this.$store.dispatch("newOrderKassa", {});
       this.bill.route = result.route;
+      this.bill.type = result.type;
+      this.bill.status = result.status;
     },
     async save() {
       await this.$store.dispatch("updateOrderKassa", this.bill);
@@ -182,6 +184,7 @@ export default {
         count: 1,
         name: prod.name,
         price: prod.price,
+        corner: prod.corner,
         code: prod.code
       };
       if (!pushed.price) pushed.price = 9999;
