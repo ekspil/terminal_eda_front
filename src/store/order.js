@@ -26,7 +26,7 @@ export default {
     async sendStatus({ dispatch, commit }, data) {
       try {
         const result = await axios.post("http://"+host+":3000/api/terminal/order/sendStatus", data);
-        console.log()
+        console.log(result.data)
         return result.data
       } catch (e) {
         console.log(dispatch, commit);
