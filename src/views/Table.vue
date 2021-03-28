@@ -189,18 +189,20 @@ export default {
             }
             return i
           });
+          if (order.type === "APP_OUT") {
+            await this.$store.dispatch("sendStatus", {
+              orderId: order.id,
+              status: "done",
+              corner: this.corner
+            });
+          }
           await this.$store.dispatch("updateOrderHidden", {
             station: this.station,
             orderId: order.id,
             corner: this.corner,
             status: "DONE"
           });
-          if (order.type === "APP_OUT") {
-            await this.$store.dispatch("sendStatus", {
-              orderId: order.id,
-              status: "done"
-            });
-          }
+
 
           return;
         }
@@ -211,18 +213,20 @@ export default {
           return i
         });
         order.ready = 1;
+
+        if (order.type === "APP_OUT") {
+          await this.$store.dispatch("sendStatus", {
+            orderId: order.id,
+            status: "cooked",
+            corner: this.corner
+          });
+        }
         await this.$store.dispatch("updateOrderHidden", {
           station: this.station,
           orderId: order.id,
           corner: this.corner,
           status: "READY"
         });
-        if (order.type === "APP_OUT") {
-          await this.$store.dispatch("sendStatus", {
-            orderId: order.id,
-            status: "cooked"
-          });
-        }
         return;
       }
       if (this.station) {
