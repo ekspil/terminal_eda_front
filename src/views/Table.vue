@@ -189,7 +189,7 @@ export default {
             }
             return i
           });
-          if (order.type === "APP_OUT") {
+          if (order.type === "APP_OUT" || order.type === "APP_IN" ) {
             await this.$store.dispatch("sendStatus", {
               orderId: order.id,
               status: "done",
@@ -214,7 +214,7 @@ export default {
         });
         order.ready = 1;
 
-        if (order.type === "APP_OUT") {
+        if (order.type === "APP_OUT" || order.type === "APP_IN" ) {
           await this.$store.dispatch("sendStatus", {
             orderId: order.id,
             status: "cooked",
