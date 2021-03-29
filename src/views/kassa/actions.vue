@@ -185,6 +185,7 @@ export default {
     },
     find() {
       this.$emit("find", this.number);
+      this.number = ""
     },
     newOrder() {
       this.$emit("newOrder");

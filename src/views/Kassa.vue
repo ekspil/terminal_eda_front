@@ -101,7 +101,7 @@ export default {
       ],
       route: 456,
       type: "IN",
-      status: "ORDERING"
+      status: "ORDERING",
     },
     menu: []
   }),
@@ -138,23 +138,34 @@ export default {
       this.selectedString = string;
     },
     async newOrder() {
-      if (this.bill.route) return;
-      this.clear();
+      if (this.bill.route) this.clear();
       const result = await this.$store.dispatch("newOrderKassa", {});
       this.bill.route = result.route;
       this.bill.type = result.type;
       this.bill.status = result.status;
     },
     async save() {
-      await this.$store.dispatch("updateOrderKassa", this.bill);
-      this.clear()
+      const body = {
+        ...this.bill,
+        printer: Number(this.$route.query.printer)
+      }
+      await this.$store.dispatch("updateOrderKassa", body);
+      this.clear(true)
     },
     async find(number) {
       const result = await this.$store.dispatch("findOrderKassa", number);
-      console.log(result)
+      if(result.error){
+        alert(result.error)
+        return
+      }
       this.bill = result
     },
-    clear() {
+    clear(notAsk) {
+      if(!notAsk){
+        if(!confirm("Вы уверены, что хотите очистить несохраненные изменения?")) return
+      }
+
+
       this.bill = {
         items: [],
         route: null,

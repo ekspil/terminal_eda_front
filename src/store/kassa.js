@@ -29,7 +29,7 @@ export default {
     async updateOrderKassa({ dispatch, commit }, body) {
       try {
         const result = await axios.post(
-          "http://" + host + ":3000/api/kassa/updateOrder/" + body.route,
+          "http://" + host + ":3000/api/kassa/updateOrder/" + body.route + "?printer=" + body.printer,
           body
         );
         return result.data;
