@@ -190,11 +190,14 @@ export default {
             return i
           });
           if (order.type === "APP_OUT" || order.type === "APP_IN" ) {
-            await this.$store.dispatch("sendStatus", {
+            const res = await this.$store.dispatch("sendStatus", {
               orderId: order.id,
               status: "done",
               corner: this.corner
             });
+            if(!res.ok){
+              return
+            }
           }
           await this.$store.dispatch("updateOrderHidden", {
             station: this.station,
@@ -215,11 +218,14 @@ export default {
         order.ready = 1;
 
         if (order.type === "APP_OUT" || order.type === "APP_IN" ) {
-          await this.$store.dispatch("sendStatus", {
+          const res = await this.$store.dispatch("sendStatus", {
             orderId: order.id,
             status: "cooked",
             corner: this.corner
           });
+          if(!res.ok){
+            return
+          }
         }
         await this.$store.dispatch("updateOrderHidden", {
           station: this.station,
