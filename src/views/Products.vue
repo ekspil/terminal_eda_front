@@ -18,6 +18,7 @@
           <tr>
             <th>#</th>
             <th>Наименование</th>
+            <th>Цена</th>
             <th>Общий код</th>
             <th>Корнер</th>
             <th>Станция</th>
@@ -31,6 +32,7 @@
           <tr v-for="item of products" :key="item.id">
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
             <td>{{ item.code }}</td>
             <td>{{ item.corner }}</td>
             <td>
@@ -81,7 +83,8 @@ export default {
       items: [],
       station: 1,
       code: null,
-      corner: "ALL"
+      corner: "ALL",
+      price: null
     }
   }),
 
@@ -110,7 +113,8 @@ export default {
           items: [],
           station: 1,
           code: null,
-          corner: "ALL"
+          corner: "ALL",
+          price: null
         };
       } else {
         this.product = JSON.parse(JSON.stringify(p));

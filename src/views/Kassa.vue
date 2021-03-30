@@ -16,7 +16,9 @@
 
       <div class="col s4 height100 gr">
         <Actions
-          @clear="clear()"
+          :bill="bill"
+          :corner="corner"
+          @clear="clear"
           @deleteString="deleteString()"
           @minusString="minusString"
           @plusString="plusString"
@@ -45,6 +47,7 @@ export default {
     ModalConfirm
   },
   async mounted() {
+    this.corner = this.$route.params.corner;
     this.menu = await this.$store.dispatch("getAllProducts", {});
     const groups = await this.$store.dispatch("getAllGroups", {});
     this.groups = groups.map(i => {
@@ -101,9 +104,10 @@ export default {
       ],
       route: 456,
       type: "IN",
-      status: "ORDERING",
+      status: "ORDERING"
     },
-    menu: []
+    menu: [],
+    corner: null
   }),
   methods: {
     deleteString() {
@@ -131,7 +135,7 @@ export default {
         this.bill.items = this.bill.items.filter(
           i => i.code !== this.selectedString
         );
-        this.selectedString = null
+        this.selectedString = null;
       }
     },
     setString(string) {
@@ -148,23 +152,25 @@ export default {
       const body = {
         ...this.bill,
         printer: Number(this.$route.query.printer)
-      }
+      };
       await this.$store.dispatch("updateOrderKassa", body);
-      this.clear(true)
+      this.clear(true);
     },
     async find(number) {
       const result = await this.$store.dispatch("findOrderKassa", number);
-      if(result.error){
-        alert(result.error)
-        return
+      if (result.error) {
+        alert(result.error);
+        return;
       }
-      this.bill = result
+      this.bill = result;
     },
     clear(notAsk) {
-      if(!notAsk){
-        if(!confirm("Вы уверены, что хотите очистить несохраненные изменения?")) return
+      if (!notAsk) {
+        if (
+          !confirm("Вы уверены, что хотите очистить несохраненные изменения?")
+        )
+          return;
       }
-
 
       this.bill = {
         items: [],
@@ -174,9 +180,9 @@ export default {
       this.selectedString = "";
     },
     addItem(posId) {
-      if(!this.bill || !this.bill.route) {
-        alert("Не выбран маршрут!")
-        return
+      if (!this.bill || !this.bill.route) {
+        alert("Не выбран маршрут!");
+        return;
       }
       if (this.bill && this.bill.items) {
         let finded = 0;

@@ -102,6 +102,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ "../views/Eo.vue")
   },
   {
+    path: "/eoterminal/",
+    name: "EoTerminal",
+    meta: { layout: "no" },
+    component: () => import(/* webpackChunkName: "about" */ "../views/EoTerminal.vue")
+  },
+  {
     path: "/kassa/:corner",
     name: "Kassa",
     meta: { layout: "no" },

@@ -37,6 +37,18 @@ export default {
         console.log(dispatch, commit);
         throw e;
       }
+    },
+    async printFiscal({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/printFiscal/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
     }
   }
 };

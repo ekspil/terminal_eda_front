@@ -21,6 +21,13 @@
         >
       </div>
       <div class="input-field">
+        <input type="text" v-model.trim="product.price" />
+        <label for="pname">Цена</label>
+        <small v-if="false" class="helper-text invalid"
+          >Должно быть заполнено</small
+        >
+      </div>
+      <div class="input-field">
         <input type="text" v-model.trim="product.corner" />
         <label for="pname">Корнер</label>
       </div>
