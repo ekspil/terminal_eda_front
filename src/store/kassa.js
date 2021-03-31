@@ -61,6 +61,42 @@ export default {
         console.log(dispatch, commit);
         throw e;
       }
+    },
+    async setPayed({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/setPayed/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
+    },
+    async zReport({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/xReport/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
+    },
+    async xReport({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/zReport/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
     }
   }
 };

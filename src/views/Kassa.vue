@@ -162,6 +162,10 @@ export default {
         alert(result.error);
         return;
       }
+      if(result.status === "PAYED"){
+        alert("Заказ уже оплачен!")
+        return
+      }
       this.bill = result;
     },
     clear(notAsk) {

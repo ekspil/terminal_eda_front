@@ -373,10 +373,14 @@ export default {
   },
   methods: {
     async xReport() {
-      //await this.$store.dispatch("xReport", {...this.bill});
+      await this.$store.dispatch("xReport", {
+        printer: Number(this.$route.query.printer) || 0,
+        kkmServer: this.$route.query.kkmServer});
     },
     async zReport() {
-      //await this.$store.dispatch("zReport", {...this.bill});
+      await this.$store.dispatch("zReport", {
+        printer: Number(this.$route.query.printer) || 0,
+        kkmServer: this.$route.query.kkmServer});
     },
     async printFiscal() {
       const result = await this.$store.dispatch("printFiscal", {
@@ -416,6 +420,7 @@ export default {
       }
 
       this.cashBack = Number(this.number) - Number(this.sum);
+      await this.$store.dispatch("setPayed", {...this.bill});
       await this.printFiscal();
       this.action="CASHDONE"
     },
@@ -432,6 +437,8 @@ export default {
         this.action = ""
         return
       }
+
+      await this.$store.dispatch("setPayed", {...this.bill, type: this.type});
       await this.printFiscal();
       this.action = "END";
     },
