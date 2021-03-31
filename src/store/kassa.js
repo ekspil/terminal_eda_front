@@ -49,6 +49,18 @@ export default {
         console.log(dispatch, commit);
         throw e;
       }
+    },
+    async payTerminal({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/payTerminal/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
     }
   }
 };

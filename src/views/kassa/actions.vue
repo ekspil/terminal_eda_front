@@ -129,7 +129,7 @@
       </div>
     </div>
 
-<div class="row " v-if="action === 'PAY_CALCULATE'">
+    <div class="row " v-if="action === 'PAY_CALCULATE'">
       <div class="col s12">
         <div class="card-panel hoverable  grey lighten-1 white-text ">
           {{ number }}
@@ -234,17 +234,24 @@
       </div>
     </div>
 
-    <div v-if="cashBack"  class="text-size-large">
-      Сдача: {{cashBack}} руб.
+    <div v-if="cashBack" class="text-size-large">
+      Сдача: {{ cashBack }} руб.
     </div>
-
 
     <div class="row " v-if="!action">
       <div class="col s6">
-        <div v-if="corner !== 'KASSA'" class="card-panel hoverable green darken-2" @click="save()">
+        <div
+          v-if="corner !== 'KASSA'"
+          class="card-panel hoverable green darken-2"
+          @click="save()"
+        >
           Сохранить
         </div>
-        <div v-if="corner === 'KASSA'" class="card-panel hoverable green darken-2" @click="pay()">
+        <div
+          v-if="corner === 'KASSA'"
+          class="card-panel hoverable green darken-2"
+          @click="pay()"
+        >
           Оплатить
         </div>
       </div>
@@ -257,7 +264,7 @@
 
     <div class="row " v-if="action === 'PAY_START'">
       <div class="col s6">
-        <div  class="card-panel hoverable grey darken-2" @click="setType('IN')">
+        <div class="card-panel hoverable grey darken-2" @click="setType('IN')">
           В зале
         </div>
       </div>
@@ -270,12 +277,18 @@
 
     <div class="row " v-if="action === 'PAY_TYPE'">
       <div class="col s6">
-        <div  class="card-panel hoverable grey darken-2" @click="setPayType('CASH')">
+        <div
+          class="card-panel hoverable grey darken-2"
+          @click="setPayType('CASH')"
+        >
           Наличные
         </div>
       </div>
       <div class="col s6">
-        <div class="card-panel hoverable grey darken-1" @click="setPayType('CASHLESS')">
+        <div
+          class="card-panel hoverable grey darken-1"
+          @click="setPayType('CASHLESS')"
+        >
           Безнал
         </div>
       </div>
@@ -283,7 +296,7 @@
 
     <div class="row " v-if="action === 'FISCAL_MENU'">
       <div class="col s6">
-        <div  class="card-panel hoverable grey darken-2" @click="xReport()">
+        <div class="card-panel hoverable grey darken-2" @click="xReport()">
           X-отчет
         </div>
       </div>
@@ -300,7 +313,7 @@
     </div>
 
     <div class="row ">
-      <div class="col s12" v-if="corner !== 'KASSA'" >
+      <div class="col s12" v-if="corner !== 'KASSA'">
         <div
           class="card-panel grey hoverable grey-text text-lighten-3"
           @click="newOrder()"
@@ -310,7 +323,7 @@
       </div>
     </div>
 
-    <div v-if="action==='WAIT'" class="cssload-thecube">
+    <div v-if="action === 'WAIT'" class="cssload-thecube">
       <div class="cssload-cube cssload-c1"></div>
       <div class="cssload-cube cssload-c2"></div>
       <div class="cssload-cube cssload-c4"></div>
@@ -318,7 +331,10 @@
     </div>
 
     <div class="row ">
-      <div class="col s12" v-if="(corner === 'KASSA' && cashBack !== null) || action === 'END'" >
+      <div
+        class="col s12"
+        v-if="(corner === 'KASSA' && cashBack !== null) || action === 'END'"
+      >
         <div
           class="card-panel grey hoverable grey-text text-lighten-3"
           @click="clearAction()"
@@ -327,8 +343,12 @@
         </div>
       </div>
     </div>
-    <div v-if="corner==='KASSA' && action ===''" class="right-align">
-      <i class="material-icons white-text right-align" @click="action = 'FISCAL_MENU'">print</i>
+    <div v-if="corner === 'KASSA' && action === ''" class="right-align">
+      <i
+        class="material-icons white-text right-align"
+        @click="action = 'FISCAL_MENU'"
+        >print</i
+      >
     </div>
   </div>
 </template>
@@ -336,13 +356,13 @@
 <script>
 export default {
   name: "actions",
-  props: ['corner', 'bill'],
+  props: ["corner", "bill"],
   data: () => ({
     number: "",
     action: "",
     type: "IN",
     payType: "CASH",
-    cashBack: null,
+    cashBack: null
   }),
   computed: {
     sum() {
@@ -352,46 +372,76 @@ export default {
     }
   },
   methods: {
-    async xReport(){
+    async xReport() {
       //await this.$store.dispatch("xReport", {...this.bill});
     },
-    async zReport(){
+    async zReport() {
       //await this.$store.dispatch("zReport", {...this.bill});
     },
-    async printFiscal(){
-      //await this.$store.dispatch("printFiscal", {...this.bill});
+    async printFiscal() {
+      const result = await this.$store.dispatch("printFiscal", {
+        ...this.bill,
+        payType: this.payType,
+        printer: Number(this.$route.query.printer) || 0,
+        typeCheck: 1,
+        isBarCode: false,
+        kkmServer: this.$route.query.kkmServer
+      });
+      console.log(result)
     },
-    clearAction(){
-      this.action = ""
-      this.type = ""
-      this.number = ""
-      this.payType = ""
-      this.cashBack = null
-      this.clear(true)
-
+    async payTerminal() {
+      const result = await this.$store.dispatch("payTerminal", {
+        ...this.bill,
+        payType: this.payType,
+        printer: Number(this.$route.query.printer) || 0,
+        typeCheck: 1,
+        isBarCode: false,
+        kkmServer: this.$route.query.kkmServer
+      });
+      console.log(result)
+      return result
     },
-    async calculate(){
-      this.cashBack = Number(this.number) - Number(this.sum)
-      await this.printFiscal()
+    clearAction() {
+      this.action = "";
+      this.type = "";
+      this.number = "";
+      this.payType = "";
+      this.cashBack = null;
+      this.clear(true);
+    },
+    async calculate() {
+      if (Number(this.number) - Number(this.sum) < 0) {
+        alert("Введена сумма меньше чем требуется для оплаты!");
+        return;
+      }
 
+      this.cashBack = Number(this.number) - Number(this.sum);
+      await this.printFiscal();
+      this.action="CASHDONE"
     },
     async setPayType(type) {
-      this.payType = type
-      if(type === "CASH"){
-        this.action = "PAY_CALCULATE"
+      this.payType = type;
+      if (type === "CASH") {
+        this.action = "PAY_CALCULATE";
+        return;
+      }
+      this.action = "WAIT";
+      const result = await this.payTerminal()
+      if(result.result.Error) {
+        alert("Произошла ошибка при оплате, либо оплата отменена пользователем!")
+        this.action = ""
         return
       }
-      this.action = "WAIT"
-      await this.printFiscal()
-      this.action = "END"
+      await this.printFiscal();
+      this.action = "END";
     },
     setType(type) {
-      this.type = type
-      this.action = "PAY_TYPE"
+      this.type = type;
+      this.action = "PAY_TYPE";
     },
     pay() {
-      if(!this.bill.route) return
-      this.action = "PAY_START"
+      if (!this.bill.route) return;
+      this.action = "PAY_START";
     },
     click(num) {
       this.number += num;
@@ -417,7 +467,7 @@ export default {
     },
     find() {
       this.$emit("find", this.number);
-      this.number = ""
+      this.number = "";
     },
     newOrder() {
       this.$emit("newOrder");
@@ -427,7 +477,6 @@ export default {
 </script>
 
 <style scoped>
-
 .text-size-large {
   font-size: large;
   font-weight: bold;
@@ -456,8 +505,6 @@ export default {
   font-weight: bold;
   padding: 19px;
 }
-
-
 
 .cssload-thecube {
   width: 73px;
@@ -497,7 +544,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(43,160,199);
+  background-color: rgb(43, 160, 199);
   animation: cssload-fold-thecube 2.76s infinite linear both;
   -o-animation: cssload-fold-thecube 2.76s infinite linear both;
   -ms-animation: cssload-fold-thecube 2.76s infinite linear both;
@@ -552,10 +599,9 @@ export default {
   -moz-animation-delay: 1.04s;
 }
 
-
-
 @keyframes cssload-fold-thecube {
-  0%, 10% {
+  0%,
+  10% {
     transform: perspective(136px) rotateX(-180deg);
     opacity: 0;
   }
@@ -572,7 +618,8 @@ export default {
 }
 
 @-o-keyframes cssload-fold-thecube {
-  0%, 10% {
+  0%,
+  10% {
     -o-transform: perspective(136px) rotateX(-180deg);
     opacity: 0;
   }
@@ -589,7 +636,8 @@ export default {
 }
 
 @-ms-keyframes cssload-fold-thecube {
-  0%, 10% {
+  0%,
+  10% {
     -ms-transform: perspective(136px) rotateX(-180deg);
     opacity: 0;
   }
@@ -606,7 +654,8 @@ export default {
 }
 
 @-webkit-keyframes cssload-fold-thecube {
-  0%, 10% {
+  0%,
+  10% {
     -webkit-transform: perspective(136px) rotateX(-180deg);
     opacity: 0;
   }
@@ -623,7 +672,8 @@ export default {
 }
 
 @-moz-keyframes cssload-fold-thecube {
-  0%, 10% {
+  0%,
+  10% {
     -moz-transform: perspective(136px) rotateX(-180deg);
     opacity: 0;
   }
