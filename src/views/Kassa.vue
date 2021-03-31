@@ -64,45 +64,45 @@ export default {
     selectedString: "",
     bill: {
       items: [
-        {
-          id: 1,
-          name: "Gamburger",
-          price: 129,
-          count: 3,
-          corner: "KPT",
-          code: "СВ-098"
-        },
-        {
-          id: 3,
-          name: "Chisburger",
-          price: 129,
-          count: 1,
-          corner: "KPT",
-
-          positions: [
-            { name: "Bulka", count: 1 },
-            { name: "Kotleta", count: 2 }
-          ],
-          code: "СВ-095"
-        },
-        {
-          id: 4,
-          name: "Coca-cola",
-          price: 129,
-          count: 2,
-          corner: "KPT",
-          code: "СВ-096"
-        },
-        {
-          id: 6,
-          name: "Souce",
-          price: 129,
-          count: 1,
-          corner: "KPT",
-          code: "СВ-097"
-        }
+        //   {
+        //     id: 1,
+        //     name: "Gamburger",
+        //     price: 129,
+        //     count: 3,
+        //     corner: "KPT",
+        //     code: "СВ-098"
+        //   },
+        //   {
+        //     id: 3,
+        //     name: "Chisburger",
+        //     price: 129,
+        //     count: 1,
+        //     corner: "KPT",
+        //
+        //     positions: [
+        //       { name: "Bulka", count: 1 },
+        //       { name: "Kotleta", count: 2 }
+        //     ],
+        //     code: "СВ-095"
+        //   },
+        //   {
+        //     id: 4,
+        //     name: "Coca-cola",
+        //     price: 129,
+        //     count: 2,
+        //     corner: "KPT",
+        //     code: "СВ-096"
+        //   },
+        //   {
+        //     id: 6,
+        //     name: "Souce",
+        //     price: 129,
+        //     count: 1,
+        //     corner: "KPT",
+        //     code: "СВ-097"
+        //   }
       ],
-      route: 456,
+      route: null,
       type: "IN",
       status: "ORDERING"
     },

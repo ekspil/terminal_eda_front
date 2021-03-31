@@ -85,7 +85,13 @@ export default {
     }
     await this.$store.dispatch("getOrders");
     this.sound = new Audio("/Sound.mp3");
+    this.screenNumber = this.$route.query.screen || 1;
+    this.screenNumber =Number(this.screenNumber)
 
+    if (this.screenNumber && this.screenNumber > 1) {
+      this.fistColumn = 2 * this.screenNumber - 1;
+      this.secondColumn = 2 * this.screenNumber;
+    }
     setInterval(async () => {
       let block = document.getElementById("left-block");
       let windowHeight = window.innerHeight;
@@ -93,8 +99,31 @@ export default {
       let height = block.scrollHeight;
       if (height > windowHeight) {
         for (let index = this.orders.length - 1; index >= 0; index--) {
-          if (this.orders[index].screen === 2) continue;
-          this.orders[index].screen = 2;
+          if (
+            this.orders[index].screen > this.fistColumn &&
+            this.orders[index].screen < this.fistColumn
+          )
+            continue;
+          this.orders[index].screen = this.secondColumn;
+          this.$forceUpdate();
+          await this.$store.dispatch("setOrderScreen", this.orders[index]);
+          return;
+        }
+      }
+
+
+
+      let block2 = document.getElementById("right-block");
+      if (!block2) return;
+      let height2 = block2.scrollHeight;
+      if (height2 > windowHeight) {
+        for (let index = this.orders.length - 1; index >= 0; index--) {
+          if (
+            this.orders[index].screen > this.secondColumn &&
+            this.orders[index].screen < this.secondColumn
+          )
+            continue;
+          this.orders[index].screen = this.secondColumn + 1;
           this.$forceUpdate();
           await this.$store.dispatch("setOrderScreen", this.orders[index]);
           return;
@@ -107,6 +136,7 @@ export default {
       data = data.filter(
         order => order.positions?.length > 0 && order.type !== "DELIVERY"
       );
+
 
       this.orders = data;
     }
@@ -135,6 +165,9 @@ export default {
     corner: null,
     orders: [],
     sound: null,
+    screenNumber: 1,
+    fistColumn: 1,
+    secondColumn: 2,
     test: [
       {
         route: 123,
@@ -165,6 +198,8 @@ export default {
         cornerReady: [
           { status: "READY", corner: "wat" },
           { status: "DONE", corner: "pen" },
+          { status: "NOTREADY", corner: "dug" },
+          { status: "NOTREADY", corner: "kpt" },
           { status: "NOTREADY", corner: "dug" },
           { status: "READY", corner: "bar" }
         ]
@@ -231,17 +266,21 @@ export default {
             name: "ЯПОНИЯ",
             gate: "GATE C1"
           };
-          default:
-            return {
-              name: "ОБЩИЙ",
-              gate: "GATE Z1"
-            }
+        default:
+          return {
+            name: "ОБЩИЙ",
+            gate: "GATE Z1"
+          };
       }
     },
 
     columns() {
-      const right = this.orders.filter(i => i.screen === 2);
-      const left = this.orders.filter(i => !i.screen || i.screen === 1);
+      const right = this.orders.filter(i => i.screen === this.secondColumn);
+      const left = this.orders.filter(i => {
+        if (i.screen === this.fistColumn) return true;
+        if (!i.screen && this.fistColumn === 1) return true;
+        return false;
+      });
       return {
         right,
         left

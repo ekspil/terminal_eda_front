@@ -281,6 +281,24 @@
       </div>
     </div>
 
+    <div class="row " v-if="action === 'FISCAL_MENU'">
+      <div class="col s6">
+        <div  class="card-panel hoverable grey darken-2" @click="xReport()">
+          X-отчет
+        </div>
+      </div>
+      <div class="col s6">
+        <div class="card-panel hoverable grey darken-1" @click="zReport()">
+          Закрытие смены
+        </div>
+      </div>
+      <div class="col s6">
+        <div class="card-panel hoverable grey darken-2" @click="action = ''">
+          Вернуться
+        </div>
+      </div>
+    </div>
+
     <div class="row ">
       <div class="col s12" v-if="corner !== 'KASSA'" >
         <div
@@ -309,6 +327,9 @@
         </div>
       </div>
     </div>
+    <div v-if="corner==='KASSA' && action ===''" class="right-align">
+      <i class="material-icons white-text right-align" @click="action = 'FISCAL_MENU'">print</i>
+    </div>
   </div>
 </template>
 
@@ -331,8 +352,13 @@ export default {
     }
   },
   methods: {
+    async xReport(){
+      //await this.$store.dispatch("xReport", {...this.bill});
+    },
+    async zReport(){
+      //await this.$store.dispatch("zReport", {...this.bill});
+    },
     async printFiscal(){
-      await setTimeout(()=>{}, 5000)
       //await this.$store.dispatch("printFiscal", {...this.bill});
     },
     clearAction(){
