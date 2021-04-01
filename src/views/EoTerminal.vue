@@ -243,7 +243,7 @@ export default {
           };
         case "wok":
           return {
-            name: "WOK&TOLK",
+            name: "WOK&TALK",
             gate: "GATE D2"
           };
         case "bim":
