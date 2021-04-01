@@ -234,7 +234,7 @@ export default {
         case "bar":
           return {
             name: "THE BAR",
-            gate: "GATE A3"
+            gate: "GATE A1"
           };
         case "com":
           return {
@@ -259,7 +259,7 @@ export default {
         case "spa":
           return {
             name: "SPAZIO",
-            gate: "GATE A5"
+            gate: "GATE A2"
           };
         case "jap":
           return {
