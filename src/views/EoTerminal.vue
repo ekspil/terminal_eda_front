@@ -287,7 +287,7 @@ export default {
       };
     },
     status(status) {
-      if (status === "READY" || status === "DONE") return "ПРИЛЕТ";
+      if (status === "READY" || status === "DONE") return "ПРИБЫЛ";
       return "ВЫЛЕТ";
     }
   }
