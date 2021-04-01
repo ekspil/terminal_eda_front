@@ -236,17 +236,17 @@ export default {
             name: "THE BAR",
             gate: "GATE A3"
           };
-        case "kpt":
+        case "com":
           return {
             name: "КОМПОТ",
             gate: "GATE D3"
           };
-        case "wat":
+        case "wok":
           return {
             name: "WOK&TOLK",
             gate: "GATE D2"
           };
-        case "bib":
+        case "bim":
           return {
             name: "BIBIMBAR",
             gate: "GATE C2"
