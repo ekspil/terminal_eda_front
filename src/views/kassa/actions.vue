@@ -387,7 +387,7 @@ export default {
         ...this.bill,
         payType: this.payType,
         printer: Number(this.$route.query.printer) || 0,
-        typeCheck: 1,
+        typeCheck: 0,
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
       });
@@ -398,7 +398,7 @@ export default {
         ...this.bill,
         payType: this.payType,
         printer: Number(this.$route.query.printer) || 0,
-        typeCheck: 1,
+        typeCheck: 0,
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
       });
