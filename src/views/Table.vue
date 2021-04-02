@@ -209,6 +209,8 @@ export default {
 
           return;
         }
+
+
         order.cornerReady.map(i => {
           if(i.corner === this.corner) {
             i.status = "READY"
@@ -227,12 +229,12 @@ export default {
             return
           }
         }
-        await this.$store.dispatch("updateOrderHidden", {
-          station: this.station,
-          orderId: order.id,
-          corner: this.corner,
-          status: "READY"
-        });
+        // await this.$store.dispatch("updateOrderHidden", {
+        //   station: this.station,
+        //   orderId: order.id,
+        //   corner: this.corner,
+        //   status: "READY"
+        // });
         return;
       }
       if (this.station) {
