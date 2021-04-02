@@ -229,12 +229,13 @@ export default {
             return
           }
         }
-        // await this.$store.dispatch("updateOrderHidden", {
-        //   station: this.station,
-        //   orderId: order.id,
-        //   corner: this.corner,
-        //   status: "READY"
-        // });
+        await this.$store.dispatch("updateOrderHidden", {
+          station: this.station,
+          orderId: order.id,
+          corner: this.corner,
+          status: "READY"
+        });
+
         return;
       }
       if (this.station) {
