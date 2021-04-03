@@ -15,7 +15,7 @@
       <!--      Menu panel-->
 
       <div class="col s4 height100 gr">
-        <Actions
+        <Actions v-if="!actionKassa"
           :bill="bill"
           :corner="corner"
           @clear="clear"
@@ -26,6 +26,9 @@
           @save="save()"
           @find="find"
         ></Actions>
+        <div v-else>
+          Ожидание завершения операции
+        </div>
       </div>
     </div>
     <ModalConfirm></ModalConfirm>
@@ -62,6 +65,7 @@ export default {
     confirm: 0,
     groups: null,
     selectedString: "",
+    actionKassa: "",
     bill: {
       items: [
         //   {
@@ -149,6 +153,7 @@ export default {
       this.bill.status = result.status;
     },
     async save() {
+      this.actionKassa = "WAIT"
       const body = {
         ...this.bill,
         printer: Number(this.$route.query.printer)
@@ -181,6 +186,7 @@ export default {
         route: null,
         type: null
       };
+      this.actionKassa = ""
       this.selectedString = "";
     },
     addItem(posId) {
