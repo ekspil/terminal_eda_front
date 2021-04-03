@@ -211,7 +211,8 @@ export default {
         name: prod.name,
         price: prod.price,
         corner: prod.corner,
-        code: prod.code
+        code: prod.code,
+        station: prod.station
       };
       if (!pushed.price) pushed.price = 9999;
       this.bill.items.push(pushed);
