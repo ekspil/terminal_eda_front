@@ -484,6 +484,10 @@ export default {
         console.log("click blocked")
         return
       }
+      if (!this.bill.route){
+        alert("Нечего сохранять!")
+        return
+      }
       this.$emit("save", this.number);
     },
     find() {
