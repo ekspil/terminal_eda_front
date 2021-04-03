@@ -15,9 +15,10 @@
       <!--      Menu panel-->
 
       <div class="col s4 height100 gr">
-        <Actions v-if="!actionKassa"
+        <Actions
           :bill="bill"
           :corner="corner"
+          :actionKassa="actionKassa"
           @clear="clear"
           @deleteString="deleteString()"
           @minusString="minusString"
@@ -26,9 +27,7 @@
           @save="save()"
           @find="find"
         ></Actions>
-        <div v-else>
-          Ожидание завершения операции
-        </div>
+
       </div>
     </div>
     <ModalConfirm></ModalConfirm>

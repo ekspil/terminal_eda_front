@@ -356,7 +356,7 @@
 <script>
 export default {
   name: "actions",
-  props: ["corner", "bill"],
+  props: ["corner", "bill", "actionKassa"],
   data: () => ({
     number: "",
     action: "",
@@ -470,6 +470,7 @@ export default {
       this.$emit("clear", data);
     },
     save() {
+      if (this.actionKassa === "WAIT") return
       this.$emit("save", this.number);
     },
     find() {
