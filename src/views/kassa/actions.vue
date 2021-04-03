@@ -245,7 +245,12 @@
           class="card-panel hoverable green darken-2"
           @click="save()"
         >
-          Сохранить
+          <div v-if="!actionKassa">
+            Сохранить
+          </div>
+          <div v-if="actionKassa === 'WAIT'">
+            <Waiter></Waiter>
+          </div>
         </div>
         <div
           v-if="corner === 'KASSA'"
@@ -354,8 +359,13 @@
 </template>
 
 <script>
+
+import Waiter from "@/views/kassa/waiter"
 export default {
   name: "actions",
+  components: {
+    Waiter
+  },
   props: ["corner", "bill", "actionKassa"],
   data: () => ({
     number: "",
@@ -470,7 +480,10 @@ export default {
       this.$emit("clear", data);
     },
     save() {
-      if (this.actionKassa === "WAIT") return
+      if (this.actionKassa === "WAIT") {
+        console.log("click blocked")
+        return
+      }
       this.$emit("save", this.number);
     },
     find() {
