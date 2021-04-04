@@ -22,6 +22,7 @@ export default {
       { title: "Смена", url: "/", exact: true },
       { title: "Группы товаров", url: "/groups" },
       { title: "Товары", url: "/Products" },
+      { title: "Модификаторы", url: "/Mods" },
       { title: "Заготовки", url: "/Items" },
       { title: "Пользователи", url: "/Users" },
       { title: "Рабочий стол", url: "/tabAdm" },

@@ -57,6 +57,15 @@ export default {
         throw e;
       }
     },
+    async getAllMods({ dispatch, commit }, { password }) {
+      try {
+        const result = await axios.get("http://"+host+":3000/api/terminal/mods/get");
+        return result.data
+      } catch (e) {
+        console.log(dispatch, commit, password);
+        throw e;
+      }
+    },
     async saveProduct(store, data) {
       try {
         await axios.post("http://"+host+":3000/api/terminal/products/save", data);
@@ -78,6 +87,15 @@ export default {
     async saveItem(store, data) {
       try {
         await axios.post("http://"+host+":3000/api/terminal/items/save", data);
+        return true
+      } catch (e) {
+        console.log(e);
+        return false
+      }
+    },
+    async saveMod(store, data) {
+      try {
+        await axios.post("http://"+host+":3000/api/terminal/mods/save", data);
         return true
       } catch (e) {
         console.log(e);

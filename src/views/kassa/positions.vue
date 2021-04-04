@@ -52,23 +52,23 @@
         <div class="col s2">
           <div>{{ item.count * item.price }}</div>
         </div>
-        <div v-if="item.positions" class="col s12 row no-margin-bottom">
+        <div v-if="item.items" class="col s12 row no-margin-bottom">
           <div
             class="row no-margin-bottom"
-            v-for="(pos, index) of item.positions"
+            v-for="(pos, index) of item.items"
             :key="index"
           >
             <div class="col s1">
               <div></div>
             </div>
             <div class="col s5 left-align">
-              <div class="margin-left">- {{ pos.name }}</div>
+              <div class="margin-left" @click="changeMod(item.id, item.allMods[index], index)">- {{ getProd(pos).name }}</div>
             </div>
             <div class="col s2">
               <div></div>
             </div>
             <div class="col s2">
-              <div>{{ pos.count }}</div>
+              <div></div>
             </div>
             <div class="col s2">
               <div></div>
@@ -89,6 +89,18 @@ export default {
       default: () => {
         return { items: [] };
       }
+    },
+    mods: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    },
+    products: {
+      type: Array,
+      default: () => {
+        return [];
+      }
     }
   },
   data: () => ({
@@ -102,6 +114,17 @@ export default {
     }
   },
   methods: {
+    getMod(id){
+      console.log(id)
+      console.log(this.mods.find(i => i.id === id))
+      return this.mods.find(i => i.id === id)
+    },
+    getProd(id){
+      return this.products.find(i => i.id === id)
+    },
+    changeMod(productId, mod, index){
+      this.$emit("changeMod", {mod, productId, index});
+    },
     select(item) {
       if (this.selectedString === item.code) {
         this.selectedString = null;

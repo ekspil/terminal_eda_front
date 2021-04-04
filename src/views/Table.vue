@@ -147,7 +147,7 @@ export default {
     filtredOrders() {
       const stationOrders = this.orders.map(order => {
         order.positions = order.positions.filter(
-          pos => !this.station || pos.station == this.station
+          pos => !this.station || pos.station == this.station || pos.station === -1
         );
 
         if (this.corner && this.corner !== "ALL") {
@@ -158,6 +158,19 @@ export default {
           });
         }
         order.positions = skdn(order.positions);
+        order.positions.map(position => {
+          if(!position.mods || position.mods.length === 0) return position
+
+          position.mods = position.mods.filter(mod => {
+            if(!this.station) return true
+            if(!mod.station && mod.station !== 0) return true
+            if(mod.station === this.station) return true
+            if(mod.station === -1) return true
+            return false
+          })
+          return position
+        })
+
         return order;
       });
       return stationOrders.filter(order => {

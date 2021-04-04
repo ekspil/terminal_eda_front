@@ -5,11 +5,12 @@
     </div>
 
     <ModalProduct
-      v-if="items && groups && isOpen"
+      v-if="items && groups && products && mods && isOpen"
       @close="refresh()"
       :items="items"
       :groups="groups"
       :product="product"
+      :mods="mods"
     />
 
     <section v-if="products && groups">
@@ -77,6 +78,7 @@ export default {
     isOpen: false,
     items: null,
     groups: null,
+    mods: null,
     product: {
       id: null,
       name: null,
@@ -84,7 +86,8 @@ export default {
       station: 1,
       code: null,
       corner: "ALL",
-      price: null
+      price: null,
+      mods: []
     }
   }),
 
@@ -114,7 +117,8 @@ export default {
           station: 1,
           code: null,
           corner: "ALL",
-          price: null
+          price: null,
+          mods: []
         };
       } else {
         this.product = JSON.parse(JSON.stringify(p));
@@ -142,6 +146,7 @@ export default {
   async mounted() {
     this.products = await this.$store.dispatch("getAllProducts", {});
     this.groups = await this.$store.dispatch("getAllGroups", {});
+    this.mods = await this.$store.dispatch("getAllMods", {});
   }
 };
 </script>

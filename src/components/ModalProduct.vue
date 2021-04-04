@@ -62,6 +62,16 @@
         </select>
         <label>Группа</label>
       </div>
+
+      <div class="input-field">
+        <select ref="selectset" multiple v-model="product.mods">
+          <option value="" disabled selected>Выберете состав сэта</option>
+          <option v-for="item of mods" :key="item.id" :value="item.id">{{
+              item.name
+          }}</option>
+        </select>
+        <label>Состав сета</label>
+      </div>
     </div>
     <div class="card-action">
       <div>
@@ -77,15 +87,19 @@
 <script>
 export default {
   name: "ModalP",
-  props: ["items", "product", "groups"],
+  props: ["items", "product", "groups", "mods"],
   data: () => ({
     modal: {},
     select: null,
-    select2: null
+    select2: null,
+    select3: null
   }),
   methods: {
     close() {
       this.$emit("close");
+    },
+    getMod(id){
+      return this.mods.find(i => i.id === id)
     },
     async save() {
       const ok = await this.$store.dispatch("saveProduct", this.product);
@@ -99,6 +113,7 @@ export default {
   async mounted() {
     this.select = window.M.FormSelect.init(this.$refs.selectprod);
     this.select2 = window.M.FormSelect.init(this.$refs.selectgroup);
+    this.select3 = window.M.FormSelect.init(this.$refs.selectset);
     window.M.updateTextFields();
   }
 };
