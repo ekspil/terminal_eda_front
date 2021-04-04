@@ -197,6 +197,7 @@ export default {
       this.clear(true);
     },
     async find(number) {
+      this.clear(true)
       const result = await this.$store.dispatch("findOrderKassa", number);
       if (result.error) {
         alert(result.error);
