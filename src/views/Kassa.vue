@@ -126,6 +126,7 @@ export default {
   methods: {
     changeMod(data){
       const {productId, mod, index} = data
+      console.log(data)
       this.modSelection = mod
       this.modSelection.index = index
       this.modItem = productId
@@ -134,9 +135,10 @@ export default {
 
     },
     setMod(productId){
-      this.bill.items = this.bill.items.map(item => {
-        if(item.id !== this.modItem) return item
+      this.bill.items = this.bill.items.map((item, index) => {
+        if(index !== this.modItem) return item
         item.items[this.modSelection.index] = productId
+        item.changed = true
         return item
       })
       this.modSelection = null
@@ -237,6 +239,7 @@ export default {
         let finded = 0;
         this.bill.items.map(item => {
           if (item.code !== posId) return item;
+          if (item.changed) return item;
           item.count++;
           finded = 1;
           return item;
@@ -271,8 +274,11 @@ export default {
         code: prod.code,
         items: selectedMods,
         allMods,
-        station: prod.station
+        station: prod.station,
       };
+      if(position){
+        pushed.changed = position.changed
+      }
       if (!pushed.price) pushed.price = 9999;
       this.bill.items.push(pushed);
       setTimeout(function() {

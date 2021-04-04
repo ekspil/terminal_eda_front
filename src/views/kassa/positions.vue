@@ -29,16 +29,16 @@
     </div>
     <div class="scroll " id="style-1">
       <div
-        v-for="(item, index) of bill.items"
+        v-for="(item, indexBig) of bill.items"
         class="row background-color-dark2 "
-        :key="index"
+        :key="indexBig"
         @click="select(item)"
         :class="{
           selected: item.code === selectedString
         }"
       >
         <div class="col s1">
-          <div>{{ index + 1 }}</div>
+          <div>{{ indexBig + 1 }}</div>
         </div>
         <div class="col s5 left-align">
           <div>{{ item.name }}</div>
@@ -62,7 +62,7 @@
               <div></div>
             </div>
             <div class="col s5 left-align">
-              <div class="margin-left" @click="changeMod(item.id, item.allMods[index], index)">- {{ getProd(pos).name }}</div>
+              <div class="margin-left" @click="changeMod(indexBig, item.allMods[index], index)">- {{ getProd(pos).name }}</div>
             </div>
             <div class="col s2">
               <div></div>
