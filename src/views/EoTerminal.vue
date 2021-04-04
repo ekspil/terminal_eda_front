@@ -302,7 +302,7 @@ export default {
 }
 
 .tiny {
-  font-size: 1.7rem;
+  font-size: 2.3rem;
 }
 .padding {
   padding-top: 10px;
@@ -310,10 +310,12 @@ export default {
 th {
   padding: 5px;
   border-radius: 0;
+  font-size: 1.2rem;
 }
 td {
   padding: 5px;
   border-radius: 0;
+  font-size: 1.4rem;
 
   font-weight: bolder;
 }
@@ -322,7 +324,7 @@ thead {
 }
 .left-col {
   width: 55%;
-  font-size: large;
+  font-size: 1.8rem;
   font-weight: bolder;
   padding-left: 5%;
 }
