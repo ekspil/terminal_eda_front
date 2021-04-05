@@ -196,21 +196,29 @@ export default {
       await this.$store.dispatch("updateOrderKassa", body);
       this.clear(true);
     },
-    async find(number) {
+    async find(number, status) {
+
       this.clear(true)
       const result = await this.$store.dispatch("findOrderKassa", number);
       if (result.error) {
         alert(result.error);
         return;
       }
-      if (result.status === "PAYED") {
+      if (result.status === "PAYED" && status !== "PAYED") {
         alert("Заказ уже оплачен!");
+        return;
+      }
+      if (result.status === "CANCELED" && status !== "CANCELED") {
+        alert("Заказ отменен!");
         return;
       }
 
       this.bill.route = result.route;
       this.bill.type = result.type;
       this.bill.status = result.status;
+      this.bill.payType = result.payType;
+      this.bill.RRNCode = result.RRNCode;
+      this.bill.AuthorizationCode = result.AuthorizationCode;
       for(let pos of result.items){
         this.addItem(pos.item_id, pos)
       }
@@ -279,6 +287,7 @@ export default {
       };
       if(position){
         pushed.changed = position.changed
+        pushed.count = position.count
       }
       if (!pushed.price) pushed.price = 9999;
       this.bill.items.push(pushed);
