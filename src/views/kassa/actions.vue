@@ -232,7 +232,158 @@
           Bksp
         </div>
       </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="action = 'PAY_TYPE'"
+        >
+          Назад
+        </div>
+      </div>
     </div>
+
+
+
+
+    <div class="row " v-if="action === 'RETURN_START'">
+      <div class="col s12">
+        <div class="card-panel hoverable  grey lighten-1 white-text ">
+          {{ number }}
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('1')"
+        >
+          1
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('2')"
+        >
+          2
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('3')"
+        >
+          3
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('4')"
+        >
+          4
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('5')"
+        >
+          5
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('6')"
+        >
+          6
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('7')"
+        >
+          7
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('8')"
+        >
+          8
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('9')"
+        >
+          9
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="find('PAYED')"
+          style="padding-left: 8px"
+        >
+          Найти
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="click('0')"
+        >
+          0
+        </div>
+      </div>
+      <div class="col s4">
+        <div
+          class="card-panel grey hoverable grey-text text-lighten-3"
+          @click="bksp()"
+        >
+          Bksp
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row " v-if="action === 'RETURN_START' || action === 'RETURN_WAIT'">
+      <div class="col s6">
+        <div
+            v-if="corner === 'KASSA'"
+            class="card-panel hoverable green darken-2"
+            @click="returnChekPayment()"
+        >
+          <div v-if="action === 'RETURN_START'">
+            Аннулировать
+          </div>
+          <div v-if="actionKassa === 'RETURN_WAIT'">
+            <Waiter></Waiter>
+          </div>
+        </div>
+      </div>
+      <div class="col s6">
+        <div class="card-panel hoverable orange darken-2" @click="clearAction()">
+          Вернуться
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
 
     <div v-if="cashBack" class="text-size-large">
       Сдача: {{ cashBack }} руб.
@@ -308,6 +459,11 @@
       <div class="col s6">
         <div class="card-panel hoverable grey darken-1" @click="zReport()">
           Закрытие смены
+        </div>
+      </div>
+      <div class="col s6">
+        <div v-if="false" class="card-panel hoverable grey darken-1" @click="returnCheck()">
+          Аннулирование
         </div>
       </div>
       <div class="col s6">
@@ -387,6 +543,13 @@ export default {
         printer: Number(this.$route.query.printer) || 0,
         kkmServer: this.$route.query.kkmServer});
     },
+    returnCheck(){
+      this.action = "RETURN_START"
+    },
+    async returnChekPayment(){
+
+
+    },
     async zReport() {
       await this.$store.dispatch("zReport", {
         printer: Number(this.$route.query.printer) || 0,
@@ -436,6 +599,7 @@ export default {
     },
     async setPayType(type) {
       this.payType = type;
+      this.bill.payType = type
       if (type === "CASH") {
         this.action = "PAY_CALCULATE";
         return;
@@ -448,12 +612,13 @@ export default {
         return
       }
 
-      await this.$store.dispatch("setPayed", {...this.bill, type: this.type});
+      await this.$store.dispatch("setPayed", {...this.bill, type: this.type, RRNCode: result.result.RRNCode, AuthorizationCode: result.result.AuthorizationCode});
       await this.printFiscal();
       this.action = "END";
     },
     setType(type) {
       this.type = type;
+      this.bill.type = type
       this.action = "PAY_TYPE";
     },
     pay() {
@@ -490,8 +655,8 @@ export default {
       }
       this.$emit("save", this.number);
     },
-    find() {
-      this.$emit("find", this.number);
+    find(status) {
+      this.$emit("find", this.number, status);
       this.number = "";
     },
     newOrder() {
