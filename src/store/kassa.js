@@ -77,7 +77,7 @@ export default {
     async zReport({ dispatch, commit }, body) {
       try {
         const result = await axios.post(
-          "http://" + host + ":3000/api/kassa/xReport/",
+          "http://" + host + ":3000/api/kassa/zReport/",
           body
         );
         return result.data;
@@ -89,7 +89,7 @@ export default {
     async xReport({ dispatch, commit }, body) {
       try {
         const result = await axios.post(
-          "http://" + host + ":3000/api/kassa/zReport/",
+          "http://" + host + ":3000/api/kassa/xReport/",
           body
         );
         return result.data;
