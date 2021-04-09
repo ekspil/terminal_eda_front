@@ -357,7 +357,7 @@
         <div
             v-if="corner === 'KASSA'"
             class="card-panel hoverable green darken-2"
-            @click="returnChekPayment()"
+            @click="returnChekPayment"
         >
           <div v-if="action === 'RETURN_START'">
             Аннулировать
@@ -543,7 +543,7 @@ export default {
         printer: Number(this.$route.query.printer) || 0,
         kkmServer: this.$route.query.kkmServer});
     },
-    returnCheck(){
+    async returnCheck(){
       this.action = "RETURN_START"
     },
     async returnChekPayment(){
