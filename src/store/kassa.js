@@ -92,7 +92,7 @@ export default {
           "http://" + host + ":3000/api/kassa/returnChekPayment/",
           body
         );
-        console.log(result.data)
+        console.log(result)
         return result.data;
       } catch (e) {
         console.log(dispatch, commit);
