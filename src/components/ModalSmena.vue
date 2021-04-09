@@ -11,6 +11,17 @@
                 <label for="TO">TO</label>
             </div>
         </div>
+        <div class="card-content">
+            <span class="card-title">Пин-код менеджера</span>
+            <div class="input-field">
+                <input
+                        id="PIN"
+                        type="text"
+                        v-model="smena.pin"
+                >
+                <label for="TO">pin</label>
+            </div>
+        </div>
         <div class="card-action">
             <div>
                 <button
@@ -43,7 +54,7 @@
         this.$emit("close");
       },
       async save() {
-        const ok = await this.$store.dispatch("saveSmena", {plan: this.smena.plan, manager: this.$store.state.auth.user.id});
+        const ok = await this.$store.dispatch("saveSmena", {plan: this.smena.plan, manager: this.$store.state.auth.user.id, pin: this.smena.pin});
         if (ok) {
           this.close()
           return

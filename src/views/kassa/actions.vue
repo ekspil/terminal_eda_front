@@ -362,7 +362,7 @@
           <div v-if="action === 'RETURN_START'">
             Аннулировать
           </div>
-          <div v-if="actionKassa === 'RETURN_WAIT'">
+          <div v-if="action === 'RETURN_WAIT'">
             <Waiter></Waiter>
           </div>
         </div>
@@ -462,7 +462,7 @@
         </div>
       </div>
       <div class="col s6">
-        <div v-if="false" class="card-panel hoverable grey darken-1" @click="returnCheck()">
+        <div v-if="true" class="card-panel hoverable grey darken-1" @click="returnCheck()">
           Аннулирование
         </div>
       </div>
@@ -522,7 +522,7 @@ export default {
   components: {
     Waiter
   },
-  props: ["corner", "bill", "actionKassa"],
+  props: ["corner", "bill", "actionKassa", "smena"],
   data: () => ({
     number: "",
     action: "",
@@ -548,6 +548,19 @@ export default {
     },
     async returnChekPayment(){
 
+      if(this.number !== this.smena.pin){
+        alert("Неверный пароль!")
+        return
+      }
+      this.action = "RETURN_WAIT"
+      const result = await this.$store.dispatch("returnChekPayment", this.bill)
+      if (result.result.Error){
+        alert("Произошла ошибка или произведена отмена операции на терминале")
+        this.action = ""
+        return
+      }
+      await this.printFiscal("CANCELED");
+
 
     },
     async zReport() {
@@ -555,12 +568,17 @@ export default {
         printer: Number(this.$route.query.printer) || 0,
         kkmServer: this.$route.query.kkmServer});
     },
-    async printFiscal() {
+    async printFiscal(status) {
+      let typeCheck = 0
+      if(status === "CANCELED"){
+        typeCheck = 1
+        this.bill.status = "CANCELED"
+      }
       const result = await this.$store.dispatch("printFiscal", {
         ...this.bill,
         payType: this.payType,
         printer: Number(this.$route.query.printer) || 0,
-        typeCheck: 0,
+        typeCheck: typeCheck,
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
       });

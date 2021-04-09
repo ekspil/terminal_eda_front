@@ -3,7 +3,14 @@
     <div class="row height100">
       <!--      Main panel-->
       <div class="col s8 height100 background-color-dark2 no-pad">
-        <Postitons v-if="menu && mods" :bill="bill" :mods="mods" :products="menu" @setString="setString" @changeMod="changeMod"></Postitons>
+        <Postitons
+          v-if="menu && mods"
+          :bill="bill"
+          :mods="mods"
+          :products="menu"
+          @setString="setString"
+          @changeMod="changeMod"
+        ></Postitons>
         <Menu
           v-if="menu && groups && !modSelection"
           :products="menu"
@@ -22,6 +29,7 @@
 
       <div class="col s4 height100 gr">
         <Actions
+          :smena="smena"
           :bill="bill"
           :corner="corner"
           :actionKassa="actionKassa"
@@ -59,6 +67,7 @@ export default {
     this.corner = this.$route.params.corner;
     this.mods = await this.$store.dispatch("getAllMods", {});
     this.menu = await this.$store.dispatch("getAllProducts", {});
+    this.smena = await this.$store.dispatch("getLastSmena");
     const groups = await this.$store.dispatch("getAllGroups", {});
     this.groups = groups.map(i => {
       i.group = true;
@@ -72,6 +81,7 @@ export default {
     modSelection: null,
     modItem: null,
     confirm: 0,
+    smena: {},
     mods: null,
     groups: null,
     selectedString: "",
@@ -124,30 +134,28 @@ export default {
     corner: null
   }),
   methods: {
-    changeMod(data){
-      const {productId, mod, index} = data
-      console.log(data)
-      this.modSelection = mod
-      this.modSelection.index = index
-      this.modItem = productId
+    changeMod(data) {
+      const { productId, mod, index } = data;
+      console.log(data);
+      this.modSelection = mod;
+      this.modSelection.index = index;
+      this.modItem = productId;
       //console.log(this.mods.find(i=> i.id === mod.id))
       //console.log(this.bill.items.find(i=> i.id === productId))
-
     },
-    setMod(productId){
+    setMod(productId) {
       this.bill.items = this.bill.items.map((item, index) => {
-        if(index !== this.modItem) return item
-        item.items[this.modSelection.index] = productId
-        item.changed = true
-        return item
-      })
-      this.modSelection = null
-      this.modItem = null
-
+        if (index !== this.modItem) return item;
+        item.items[this.modSelection.index] = productId;
+        item.changed = true;
+        return item;
+      });
+      this.modSelection = null;
+      this.modItem = null;
     },
 
-    getProd(id){
-      return this.menu.find(i => i.id === id)
+    getProd(id) {
+      return this.menu.find(i => i.id === id);
     },
     deleteString() {
       if (!this.selectedString) return;
@@ -197,8 +205,7 @@ export default {
       this.clear(true);
     },
     async find(number, status) {
-
-      this.clear(true)
+      this.clear(true);
       const result = await this.$store.dispatch("findOrderKassa", number);
       if (result.error) {
         alert(result.error);
@@ -219,8 +226,8 @@ export default {
       this.bill.payType = result.payType;
       this.bill.RRNCode = result.RRNCode;
       this.bill.AuthorizationCode = result.AuthorizationCode;
-      for(let pos of result.items){
-        this.addItem(pos.item_id, pos)
+      for (let pos of result.items) {
+        this.addItem(pos.item_id, pos);
       }
     },
     clear(notAsk) {
@@ -257,22 +264,22 @@ export default {
       }
 
       const prod = this.menu.find(item => {
-        if(posId === item.code && !position) return true
-        if(posId === item.id && position) return true
-        return false
+        if (posId === item.code && !position) return true;
+        if (posId === item.id && position) return true;
+        return false;
       });
 
       if (!prod) return;
       const allMods = prod.mods.map(item => {
-        let mod = this.mods.find(i => i.id === item)
-        return mod
-      })
+        let mod = this.mods.find(i => i.id === item);
+        return mod;
+      });
       let selectedMods = allMods.map(item => {
-        if(item.items.length) return item.items[0]
-        throw new Error("Неверно заполнены данные сэта")
-      })
-      if(position){
-        selectedMods = position.items
+        if (item.items.length) return item.items[0];
+        throw new Error("Неверно заполнены данные сэта");
+      });
+      if (position) {
+        selectedMods = position.items;
       }
       const pushed = {
         count: 1,
@@ -283,11 +290,11 @@ export default {
         code: prod.code,
         items: selectedMods,
         allMods,
-        station: prod.station,
+        station: prod.station
       };
-      if(position){
-        pushed.changed = position.changed
-        pushed.count = position.count
+      if (position) {
+        pushed.changed = position.changed;
+        pushed.count = position.count;
       }
       if (!pushed.price) pushed.price = 9999;
       this.bill.items.push(pushed);

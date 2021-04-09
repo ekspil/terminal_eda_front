@@ -67,7 +67,8 @@ export default {
   data: ()=>({
     isOpen: false,
     smena: {
-      plan: null
+      plan: null,
+      pin: "1234321"
     },
     modalSmena: null,
   }),
