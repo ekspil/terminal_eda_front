@@ -73,7 +73,10 @@ export default {
     modalSmena: null,
   }),
   async mounted() {
-    this.smena = await this.$store.dispatch("getLastSmena" );
+    const smena = await this.$store.dispatch("getLastSmena" );
+    if (smena){
+      this.smena = smena
+    }
   },
   methods: {
     async refresh() {
