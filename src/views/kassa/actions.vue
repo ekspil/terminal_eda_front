@@ -553,7 +553,7 @@ export default {
         return
       }
       this.action = "RETURN_WAIT"
-      const result = await this.$store.dispatch("returnChekPayment", this.bill)
+      const result = await this.$store.dispatch("returnChekPayment", {...this.bill, kkmServer: this.$route.query.kkmServer})
       if (result.result.Error){
         alert("Произошла ошибка или произведена отмена операции на терминале")
         this.action = ""
