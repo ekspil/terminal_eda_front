@@ -545,6 +545,7 @@ export default {
     },
     async returnCheck(){
       this.action = "RETURN_START"
+      this.$emit("setAction", "RETURN")
     },
     async returnChekPayment(){
 
@@ -560,6 +561,7 @@ export default {
         return
       }
       await this.printFiscal("CANCELED");
+      this.$emit("setAction", "")
 
 
     },
@@ -603,6 +605,7 @@ export default {
       this.payType = "";
       this.cashBack = null;
       this.clear(true);
+      this.$emit("setAction", "")
     },
     async calculate() {
       if (Number(this.number) - Number(this.sum) < 0) {

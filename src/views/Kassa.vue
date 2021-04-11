@@ -12,10 +12,11 @@
           @changeMod="changeMod"
         ></Postitons>
         <Menu
-          v-if="menu && groups && !modSelection"
+          v-if="menu && groups && !modSelection && !actionKassa"
           :products="menu"
           :groups="groups"
           @addItem="addItem"
+
         ></Menu>
         <ModSelector
           v-if="menu && modSelection"
@@ -40,6 +41,7 @@
           @newOrder="newOrder()"
           @save="save()"
           @find="find"
+          @setAction="setActionKassa"
         ></Actions>
       </div>
     </div>
@@ -134,6 +136,9 @@ export default {
     corner: null
   }),
   methods: {
+    setActionKassa(value) {
+      this.actionKassa = value;
+    },
     changeMod(data) {
       const { productId, mod, index } = data;
       console.log(data);
