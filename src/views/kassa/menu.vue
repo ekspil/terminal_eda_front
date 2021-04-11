@@ -50,6 +50,7 @@ export default {
     menu(){
       const filtredProducts = this.products.filter(prod => {
         if(prod.corner === this.$route.params.corner) return true
+        if(this.$route.params.corner === "KASSA") return true
         return false
       })
       if(!this.selectedGroup){
