@@ -10,45 +10,42 @@
         <div
           class="card bill-card"
           :class="{
-            'amber lighten-5':
-              (order.type === 'IN' || order.type === 'OUT') &&
+            'amber lighten-4':
               order.ready === 0 &&
               order.payed === 0 &&
               !order.die &&
               !order.alarm,
-            'red lighten-5':
-              (order.type === 'IN' || order.type === 'OUT') &&
+            'red lighten-4':
               order.ready === 0 &&
               order.payed === 1 &&
               !order.die &&
               !order.alarm,
             'teal lighten-4':
-              (order.type === 'IN' || order.type === 'OUT') &&
               order.ready === 1 &&
               order.payed === 1 &&
               !order.die,
-            'purple lighten-4':
-              (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
-              order.ready === 0 &&
-              order.payed === 1 &&
-              !order.die &&
-              !order.alarm,
-            'blue lighten-4':
-              (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
-              order.ready === 1 &&
-              order.payed === 1 &&
-              !order.die,
-            'amber lighten-1':
-              order.type === 'DELIVERY' &&
-              order.ready === 0 &&
-              order.payed === 1 &&
-              !order.die &&
-              !order.alarm,
-            'light-green lighten-3':
-              order.type === 'DELIVERY' &&
-              order.ready === 1 &&
-              order.payed === 1 &&
-              !order.die,
+            // 'purple lighten-4':
+            //   (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
+            //   order.ready === 0 &&
+            //   order.payed === 1 &&
+            //   !order.die &&
+            //   !order.alarm,
+            // 'blue lighten-4':
+            //   (order.type === 'APP_OUT' || order.type === 'APP_IN') &&
+            //   order.ready === 1 &&
+            //   order.payed === 1 &&
+            //   !order.die,
+            // 'amber lighten-1':
+            //   order.type === 'DELIVERY' &&
+            //   order.ready === 0 &&
+            //   order.payed === 1 &&
+            //   !order.die &&
+            //   !order.alarm,
+            // 'light-green lighten-3':
+            //   order.type === 'DELIVERY' &&
+            //   order.ready === 1 &&
+            //   order.payed === 1 &&
+            //   !order.die,
             'orange darken-4': order.alarm && !order.die && !order.ready,
             'grey darken-3': order.die
           }"
