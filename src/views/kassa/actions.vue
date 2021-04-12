@@ -242,9 +242,6 @@
       </div>
     </div>
 
-
-
-
     <div class="row " v-if="action === 'RETURN_START'">
       <div class="col s12">
         <div class="card-panel hoverable  grey lighten-1 white-text ">
@@ -350,14 +347,15 @@
       </div>
     </div>
 
-
-
-    <div class="row " v-if="action === 'RETURN_START' || action === 'RETURN_WAIT'">
+    <div
+      class="row "
+      v-if="action === 'RETURN_START' || action === 'RETURN_WAIT'"
+    >
       <div class="col s6">
         <div
-            v-if="corner === 'KASSA'"
-            class="card-panel hoverable green darken-2"
-            @click="returnChekPayment"
+          v-if="corner === 'KASSA'"
+          class="card-panel hoverable green darken-2"
+          @click="returnChekPayment"
         >
           <div v-if="action === 'RETURN_START'">
             Аннулировать
@@ -368,22 +366,14 @@
         </div>
       </div>
       <div class="col s6">
-        <div class="card-panel hoverable orange darken-2" @click="clearAction()">
+        <div
+          class="card-panel hoverable orange darken-2"
+          @click="clearAction()"
+        >
           Вернуться
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
 
     <div v-if="cashBack" class="text-size-large">
       Сдача: {{ cashBack }} руб.
@@ -462,7 +452,11 @@
         </div>
       </div>
       <div class="col s6">
-        <div v-if="true" class="card-panel hoverable grey darken-1" @click="returnCheck()">
+        <div
+          v-if="true"
+          class="card-panel hoverable grey darken-1"
+          @click="returnCheck()"
+        >
           Аннулирование
         </div>
       </div>
@@ -515,8 +509,7 @@
 </template>
 
 <script>
-
-import Waiter from "@/views/kassa/waiter"
+import Waiter from "@/views/kassa/waiter";
 export default {
   name: "actions",
   components: {
@@ -541,40 +534,51 @@ export default {
     async xReport() {
       await this.$store.dispatch("xReport", {
         printer: Number(this.$route.query.printer) || 0,
-        kkmServer: this.$route.query.kkmServer});
+        kkmServer: this.$route.query.kkmServer
+      });
     },
-    async returnCheck(){
-      this.action = "RETURN_START"
-      this.$emit("setAction", "RETURN")
+    async returnCheck() {
+      this.action = "RETURN_START";
+      this.$emit("setAction", "RETURN");
     },
-    async returnChekPayment(){
+    async returnChekPayment() {
+      if (this.number !== this.smena.pin) {
+        alert("Неверный пароль!");
+        return;
+      }
+      this.action = "RETURN_WAIT";
 
-      if(this.number !== this.smena.pin){
-        alert("Неверный пароль!")
-        return
+      if (this.bill.payType === "CASHLESS") {
+        const result = await this.$store.dispatch("returnChekPayment", {
+          ...this.bill,
+          kkmServer: this.$route.query.kkmServer
+        });
+        if (!result.result || result.result.Error) {
+          alert(
+            "Произошла ошибка или произведена отмена операции на терминале"
+          );
+          this.action = "";
+          return;
+        }
       }
-      this.action = "RETURN_WAIT"
-      const result = await this.$store.dispatch("returnChekPayment", {...this.bill, kkmServer: this.$route.query.kkmServer})
-      if (!result.result || result.result.Error){
-        alert("Произошла ошибка или произведена отмена операции на терминале")
-        this.action = ""
-        return
-      }
+
       await this.printFiscal("CANCELED");
-      this.$emit("setAction", "")
+      await this.$store.dispatch("setCanceled", { ...this.bill });
 
-
+      this.$emit("setAction", "");
+      this.action = "";
     },
     async zReport() {
       await this.$store.dispatch("zReport", {
         printer: Number(this.$route.query.printer) || 0,
-        kkmServer: this.$route.query.kkmServer});
+        kkmServer: this.$route.query.kkmServer
+      });
     },
     async printFiscal(status) {
-      let typeCheck = 0
-      if(status === "CANCELED"){
-        typeCheck = 1
-        this.bill.status = "CANCELED"
+      let typeCheck = 0;
+      if (status === "CANCELED") {
+        typeCheck = 1;
+        this.bill.status = "CANCELED";
       }
       const result = await this.$store.dispatch("printFiscal", {
         ...this.bill,
@@ -584,7 +588,7 @@ export default {
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
       });
-      console.log(result)
+      console.log(result);
     },
     async payTerminal() {
       const result = await this.$store.dispatch("payTerminal", {
@@ -595,8 +599,8 @@ export default {
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
       });
-      console.log(result)
-      return result
+      console.log(result);
+      return result;
     },
     clearAction() {
       this.action = "";
@@ -605,7 +609,7 @@ export default {
       this.payType = "";
       this.cashBack = null;
       this.clear(true);
-      this.$emit("setAction", "")
+      this.$emit("setAction", "");
     },
     async calculate() {
       if (Number(this.number) - Number(this.sum) < 0) {
@@ -614,32 +618,39 @@ export default {
       }
 
       this.cashBack = Number(this.number) - Number(this.sum);
-      await this.$store.dispatch("setPayed", {...this.bill});
+      await this.$store.dispatch("setPayed", { ...this.bill });
       await this.printFiscal();
-      this.action="CASHDONE"
+      this.action = "CASHDONE";
     },
     async setPayType(type) {
       this.payType = type;
-      this.bill.payType = type
+      this.bill.payType = type;
       if (type === "CASH") {
         this.action = "PAY_CALCULATE";
         return;
       }
       this.action = "WAIT";
-      const result = await this.payTerminal()
-      if(result.result.Error) {
-        alert("Произошла ошибка при оплате, либо оплата отменена пользователем!")
-        this.action = ""
-        return
+      const result = await this.payTerminal();
+      if (result.result.Error) {
+        alert(
+          "Произошла ошибка при оплате, либо оплата отменена пользователем!"
+        );
+        this.action = "";
+        return;
       }
 
-      await this.$store.dispatch("setPayed", {...this.bill, type: this.type, RRNCode: result.result.RRNCode, AuthorizationCode: result.result.AuthorizationCode});
+      await this.$store.dispatch("setPayed", {
+        ...this.bill,
+        type: this.type,
+        RRNCode: result.result.RRNCode,
+        AuthorizationCode: result.result.AuthorizationCode
+      });
       await this.printFiscal();
       this.action = "END";
     },
     setType(type) {
       this.type = type;
-      this.bill.type = type
+      this.bill.type = type;
       this.action = "PAY_TYPE";
     },
     pay() {
@@ -667,12 +678,12 @@ export default {
     },
     save() {
       if (this.actionKassa === "WAIT") {
-        console.log("click blocked")
-        return
+        console.log("click blocked");
+        return;
       }
-      if (!this.bill.route){
-        alert("Нечего сохранять!")
-        return
+      if (!this.bill.route) {
+        alert("Нечего сохранять!");
+        return;
       }
       this.$emit("save", this.number);
     },

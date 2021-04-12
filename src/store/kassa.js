@@ -74,6 +74,18 @@ export default {
         throw e;
       }
     },
+    async setCanceled({ dispatch, commit }, body) {
+      try {
+        const result = await axios.post(
+          "http://" + host + ":3000/api/kassa/setCanceled/",
+          body
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
+    },
     async zReport({ dispatch, commit }, body) {
       try {
         const result = await axios.post(
