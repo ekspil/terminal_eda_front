@@ -15,6 +15,17 @@ export default {
         throw e;
       }
     },
+    async getImgs({ dispatch, commit }) {
+      try {
+        const result = await axios.get(
+          "http://" + host + ":3000/api/eo/getImgs"
+        );
+        return result.data;
+      } catch (e) {
+        console.log(dispatch, commit);
+        throw e;
+      }
+    },
     async newOrderKassa({ dispatch, commit }) {
       try {
         const result = await axios.get(

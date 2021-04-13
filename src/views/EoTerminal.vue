@@ -69,6 +69,16 @@
         </div>
       </div>
     </div>
+
+    <div
+      v-if="host && imgs"
+      class="slideshow carousel carousel-slider center"
+      :class="{ slideshow: anyOnScreen, 'slideshow-hidden': !anyOnScreen }"
+    >
+      <div v-for="img of imgs" class="carousel-item" :key="img">
+        <img :src="'http://' + host + ':3000/slider/' + img" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,6 +86,10 @@
 export default {
   name: "Home",
   components: {},
+  async beforeMount() {
+    this.host = document.location.host.split(":")[0];
+    this.imgs = await this.$store.dispatch("getImgs");
+  },
   async mounted() {
     if (this.$route.params.station) {
       this.station = this.$route.params.station;
@@ -86,7 +100,7 @@ export default {
     await this.$store.dispatch("getOrders");
     this.sound = new Audio("/Sound.mp3");
     this.screenNumber = this.$route.query.screen || 1;
-    this.screenNumber =Number(this.screenNumber)
+    this.screenNumber = Number(this.screenNumber);
 
     if (this.screenNumber && this.screenNumber > 1) {
       this.fistColumn = 2 * this.screenNumber - 1;
@@ -111,8 +125,6 @@ export default {
         }
       }
 
-
-
       let block2 = document.getElementById("right-block");
       if (!block2) return;
       let height2 = block2.scrollHeight;
@@ -130,6 +142,12 @@ export default {
         }
       }
     }, 100);
+
+    setInterval(() => {
+      if (this.Carousel) return;
+      if (!this.anyOnScreen) return;
+      this.setCarousel();
+    }, 1000);
   },
   sockets: {
     fullCheck(data) {
@@ -137,11 +155,22 @@ export default {
         order => order.positions?.length > 0 && order.type !== "DELIVERY"
       );
 
-
       this.orders = data;
     }
   },
   computed: {
+    anyOnScreen() {
+      const anyOne = this.orders.filter(i => {
+        if (i.screen === this.secondColumn || i.screen === this.fistColumn)
+          return true;
+        if (!i.screen && (!this.screenNumber || this.screenNumber === 1))
+          return true;
+        return false;
+      });
+      console.log(anyOne);
+      if (anyOne && anyOne.length > 0) return false;
+      return true;
+    },
     ready() {
       return this.orders.filter(
         order => order.ready === 1 && order.type !== "DELIVERY"
@@ -162,9 +191,11 @@ export default {
   },
   data: () => ({
     station: null,
+    host: null,
     corner: null,
     orders: [],
     sound: null,
+    imgs: [],
     screenNumber: 1,
     fistColumn: 1,
     secondColumn: 2,
@@ -224,6 +255,15 @@ export default {
     ]
   }),
   methods: {
+    setCarousel() {
+      this.Carousel = window.M.Carousel.init(
+        document.querySelector(".carousel"),
+        { fullWidth: true, noWrap: false }
+      );
+      setInterval(() => {
+        this.Carousel.next();
+      }, 10000);
+    },
     cornerData(corner) {
       switch (corner) {
         case "dug":
@@ -379,5 +419,21 @@ thead {
   font-weight: 700;
   line-height: 26px;
   margin: 0;
+}
+.slideshow {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 99;
+  height: 100vh;
+  width: 100%;
+}
+.slideshow-hidden {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  height: 100vh;
+  width: 100%;
 }
 </style>
