@@ -618,7 +618,13 @@ export default {
       }
 
       this.cashBack = Number(this.number) - Number(this.sum);
+      const body = {
+        ...this.bill,
+        notPrint: true,
+      };
+      await this.$store.dispatch("updateOrderKassa", body);
       await this.$store.dispatch("setPayed", { ...this.bill });
+
       await this.printFiscal();
       this.action = "CASHDONE";
     },
@@ -638,13 +644,18 @@ export default {
         this.action = "";
         return;
       }
-
+      const body = {
+        ...this.bill,
+        notPrint: true,
+      };
+      await this.$store.dispatch("updateOrderKassa", body);
       await this.$store.dispatch("setPayed", {
         ...this.bill,
         type: this.type,
         RRNCode: result.result.RRNCode,
         AuthorizationCode: result.result.AuthorizationCode
       });
+
       await this.printFiscal();
       this.action = "END";
     },
