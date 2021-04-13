@@ -1,7 +1,18 @@
 <template>
   <div class="row height40 scroll" id="style-1">
-    <div class="col s3" v-if="selectedGroup" >
-      <div class="card-panel orange lighten-2 hoverable white-text" @click="back()">
+    <div class="col s3" v-if="selectedGroup">
+      <div
+        class="card-panel orange lighten-2 hoverable white-text"
+        @click="back()"
+      >
+        Назад
+      </div>
+    </div>
+    <div class="col s3" v-else-if="selectedCorner">
+      <div
+        class="card-panel orange lighten-2 hoverable white-text"
+        @click="backCorner()"
+      >
         Назад
       </div>
     </div>
@@ -33,35 +44,105 @@ export default {
   data: () => ({
     level: 1,
     selectedGroup: null,
+    selectedCorner: null
   }),
   methods: {
-    back(){
-      this.selectedGroup = null
+    back() {
+      this.selectedGroup = null;
+    },
+    backCorner() {
+      this.selectedCorner = null;
     },
     add(item) {
-      if(item.group){
-        this.selectedGroup = item.id
-        return
+      if (item.group) {
+        this.selectedGroup = item.id;
+        return;
+      }
+      if (item.gate) {
+        this.selectedCorner = item.id;
+        return;
       }
       this.$emit("addItem", item.code);
     }
   },
   computed: {
-    menu(){
-      const filtredProducts = this.products.filter(prod => {
-        if(prod.corner === this.$route.params.corner) return true
-        if(this.$route.params.corner === "KASSA") return true
-        return false
-      })
-      if(!this.selectedGroup){
-        return this.groups.filter(group => {
-          const p = filtredProducts.find( i => i.group_id === group.id)
-          if(!p) return false
-          return true
-        })
+    menu() {
+
+      if (this.$route.params.corner === "KASSA") {
+        if (!this.selectedCorner) {
+          return [
+            {
+              id: "dug",
+              name: "DOUGLAS",
+              gate: "GATE D1"
+            },
+            {
+              id: "bar",
+              name: "THE BAR",
+              gate: "GATE A1"
+            },
+            {
+              id: "com",
+              name: "КОМПОТ",
+              gate: "GATE D3"
+            },
+            {
+              id: "wok",
+              name: "WOK&TALK",
+              gate: "GATE D2"
+            },
+            {
+              id: "bim",
+              name: "BIBIMBAR",
+              gate: "GATE C2"
+            },
+            {
+              id: "pen",
+              name: "PENKA",
+              gate: "GATE B2"
+            },
+            {
+              id: "spa",
+              name: "SPAZIO",
+              gate: "GATE A2"
+            },
+            {
+              id: "jap",
+              name: "ЯПОНИЯ",
+              gate: "GATE C1"
+            }
+          ];
+        }
+        const filtredProducts = this.products.filter(prod => {
+          if (prod.corner === this.selectedCorner) return true;
+          return false;
+        });
+        if (!this.selectedGroup) {
+          return this.groups.filter(group => {
+            const p = filtredProducts.find(i => i.group_id === group.id);
+            if (!p) return false;
+            return true;
+          });
+        } else {
+          return filtredProducts.filter(p => p.group_id === this.selectedGroup);
+        }
+
+
       }
-      else {
-        return filtredProducts.filter(p => p.group_id === this.selectedGroup)
+
+      const filtredProducts = this.products.filter(prod => {
+        if (prod.corner === this.$route.params.corner) return true;
+        if (this.$route.params.corner === "KASSA") return true;
+        return false;
+      });
+      if (!this.selectedGroup) {
+        return this.groups.filter(group => {
+          const p = filtredProducts.find(i => i.group_id === group.id);
+          if (!p) return false;
+          return true;
+        });
+      } else {
+        return filtredProducts.filter(p => p.group_id === this.selectedGroup);
       }
     }
   }
