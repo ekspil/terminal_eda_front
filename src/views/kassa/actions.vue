@@ -520,7 +520,7 @@ export default {
     number: "",
     action: "",
     type: "IN",
-    payType: "CASH",
+    payType: "CASHLESS",
     cashBack: null
   }),
   computed: {
