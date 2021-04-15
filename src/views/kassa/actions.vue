@@ -575,19 +575,23 @@ export default {
       });
     },
     async printFiscal(status) {
-      let typeCheck = 0;
-      if (status === "CANCELED") {
-        typeCheck = 1;
-        this.bill.status = "CANCELED";
-      }
-      const result = await this.$store.dispatch("printFiscal", {
+      const data = {
         ...this.bill,
-        payType: this.payType,
+
         printer: Number(this.$route.query.printer) || 0,
-        typeCheck: typeCheck,
+        typeCheck: 0,
         isBarCode: false,
         kkmServer: this.$route.query.kkmServer
-      });
+      };
+
+      if (status === "CANCELED") {
+        data.typeCheck = 1;
+        data.status = "CANCELED";
+      } else {
+        data.payType = this.payType;
+      }
+
+      const result = await this.$store.dispatch("printFiscal", data);
       console.log(result);
     },
     async payTerminal() {
@@ -620,7 +624,7 @@ export default {
       this.cashBack = Number(this.number) - Number(this.sum);
       const body = {
         ...this.bill,
-        notPrint: true,
+        notPrint: true
       };
       await this.$store.dispatch("updateOrderKassa", body);
       await this.$store.dispatch("setPayed", { ...this.bill });
@@ -646,7 +650,7 @@ export default {
       }
       const body = {
         ...this.bill,
-        notPrint: true,
+        notPrint: true
       };
       await this.$store.dispatch("updateOrderKassa", body);
       await this.$store.dispatch("setPayed", {
