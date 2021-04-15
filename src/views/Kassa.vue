@@ -19,7 +19,7 @@
 
         ></Menu>
         <ModSelector
-          v-if="menu && modSelection"
+          v-if="menu && modSelection && !actionKassa"
           :products="menu"
           :mod="modSelection"
           @setMod="setMod"
@@ -248,7 +248,9 @@ export default {
         route: null,
         type: null
       };
-      this.actionKassa = "";
+      if(!this.actionKassa.includes('RETURN')){
+        this.actionKassa = "";
+      }
       this.selectedString = "";
     },
     addItem(posId, position) {
