@@ -567,6 +567,7 @@ export default {
 
       this.$emit("setAction", "");
       this.action = "";
+      this.clearAction()
     },
     async zReport() {
       await this.$store.dispatch("zReport", {
