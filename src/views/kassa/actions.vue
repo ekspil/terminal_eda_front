@@ -485,10 +485,10 @@
       <div class="cssload-cube cssload-c3"></div>
     </div>
 
-    <div class="row ">
+    <div class="row " v-if="(corner === 'KASSA' && cashBack !== null) || action === 'END'">
       <div
         class="col s12"
-        v-if="(corner === 'KASSA' && cashBack !== null) || action === 'END'"
+
       >
         <div
           class="card-panel grey hoverable grey-text text-lighten-3"
@@ -500,10 +500,8 @@
     </div>
     <div v-if="corner === 'KASSA' && action === ''" class="right-align">
       <i
-        class="material-icons white-text right-align"
-        @click="action = 'FISCAL_MENU'"
-        >print</i
-      >
+        class="material-icons white-text " style=" height: 31px"
+        @click="action = 'FISCAL_MENU'">print</i>
     </div>
   </div>
 </template>
