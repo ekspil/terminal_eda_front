@@ -560,8 +560,9 @@ export default {
         }
       }
 
-      await this.printFiscal("CANCELED");
+
       await this.$store.dispatch("setCanceled", { ...this.bill });
+      await this.printFiscal("CANCELED");
 
       this.$emit("setAction", "");
       this.action = "";

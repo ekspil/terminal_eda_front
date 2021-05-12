@@ -60,7 +60,7 @@
               <div class="inline" style="float: left;">{{ order.id }}</div>
               <div class="inline ">{{ order.type }}</div>
               <div class="inline" style="float: right;">
-                <OrderTime :time="order" />
+                <OrderTime :time="order" :corner="corner" />
               </div>
             </div>
             <div
