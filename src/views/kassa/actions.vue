@@ -468,7 +468,7 @@
     </div>
 
     <div class="row ">
-      <div class="col s12" v-if="action === '' && corner !== 'KASSA'">
+      <div class="col s12" v-if="action === ''">
         <div
           class="card-panel grey hoverable grey-text text-lighten-3"
           @click="newOrder()"
