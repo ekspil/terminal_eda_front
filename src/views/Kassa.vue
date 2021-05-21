@@ -303,7 +303,7 @@ export default {
         pushed.changed = position.changed;
         pushed.count = position.count;
       }
-      if (!pushed.price) pushed.price = 9999;
+      if (!pushed.price) pushed.price = 0;
       this.bill.items.push(pushed);
       setTimeout(function() {
         const elem = document.getElementById("style-1");
