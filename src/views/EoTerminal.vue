@@ -363,7 +363,7 @@ thead {
   background-color: #ffe442;
 }
 .left-col {
-  width: 55%;
+  width: 45%;
   font-size: 1.8rem;
   font-weight: bolder;
   padding-left: 5%;
