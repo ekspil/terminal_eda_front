@@ -306,6 +306,11 @@ export default {
             name: "ЯПОНИЯ",
             gate: "GATE C1"
           };
+        case "fob":
+          return {
+            name: "ФоБо",
+            gate: "GATE C1"
+          };
         default:
           return {
             name: "ОБЩИЙ",
