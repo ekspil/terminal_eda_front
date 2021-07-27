@@ -353,7 +353,7 @@
     >
       <div class="col s6">
         <div
-          v-if="corner === 'KASSA'"
+          v-if="corner === 'KASSA' || allowPay"
           class="card-panel hoverable green darken-2"
           @click="returnChekPayment"
         >
@@ -382,7 +382,7 @@
     <div class="row " v-if="!action">
       <div class="col s6">
         <div
-          v-if="corner !== 'KASSA'"
+          v-if="corner !== 'KASSA' && !allowPay"
           class="card-panel hoverable green darken-2"
           @click="save()"
         >
@@ -394,7 +394,7 @@
           </div>
         </div>
         <div
-          v-if="corner === 'KASSA'"
+          v-if="corner === 'KASSA' || allowPay"
           class="card-panel hoverable green darken-2"
           @click="pay()"
         >
@@ -485,7 +485,7 @@
       <div class="cssload-cube cssload-c3"></div>
     </div>
 
-    <div class="row " v-if="(corner === 'KASSA' && cashBack !== null) || action === 'END'">
+    <div class="row " v-if="((corner === 'KASSA' || allowPay) && cashBack !== null) || action === 'END'">
       <div
         class="col s12"
 
@@ -498,7 +498,7 @@
         </div>
       </div>
     </div>
-    <div v-if="corner === 'KASSA' && action === ''" class="right-align">
+    <div v-if="(corner === 'KASSA' || allowPay) && action === ''" class="right-align">
       <i
         class="material-icons white-text " style=" height: 31px"
         @click="action = 'FISCAL_MENU'">print</i>
@@ -519,13 +519,19 @@ export default {
     action: "",
     type: "IN",
     payType: "CASHLESS",
-    cashBack: null
+    cashBack: null,
+    allowPay: false,
   }),
   computed: {
     sum() {
       return this.bill.items.reduce((acc, item) => {
         return (acc += item.count * item.price);
       }, 0);
+    }
+  },
+  mounted() {
+    if(this.$route.query.pay){
+      this.allowPay = true
     }
   },
   methods: {

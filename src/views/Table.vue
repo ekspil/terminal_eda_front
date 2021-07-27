@@ -116,6 +116,8 @@ export default {
     if (this.$route.params.corner) {
       this.corner = this.$route.params.corner;
     }
+
+    this.sound = new Audio("/SoundTable.mp3");
     this.$store.dispatch("getOrders");
   },
   sockets: {
@@ -137,6 +139,8 @@ export default {
           return false;
         });
       }
+
+
       this.orders = data;
     }
   },
@@ -187,8 +191,17 @@ export default {
   data: () => ({
     station: null,
     corner: null,
-    orders: []
+    orders: [],
+    sound: null,
   }),
+  watch: {
+    filtredOrders(n, o){
+      if(n.length > o.length){
+        this.sound.currentTime = 0;
+        this.sound.play();
+      }
+    }
+  },
   methods: {
     async nextState(order) {
       if (this.station === 0 && this.corner && this.corner !== "ALL") {
