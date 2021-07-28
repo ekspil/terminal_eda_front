@@ -107,8 +107,8 @@ export default {
               gate: "GATE A2"
             },
             {
-              id: "jap",
-              name: "ЯПОНИЯ",
+              id: "fob",
+              name: "ФоБо",
               gate: "GATE C1"
             }
           ];
