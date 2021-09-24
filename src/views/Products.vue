@@ -1,7 +1,25 @@
 <template>
   <div>
-    <div class="page-title">
-      <h3>Продукты</h3>
+    <div>
+      <table>
+        <tbody>
+        <tr class="page-title">
+          <td><h3 >Продукты</h3></td>
+          <td>
+            <div class="input-field" >
+              <select ref="selectcorner"  v-model="selectedCorner">
+                <option :value="null" selected>Все</option>
+                <option v-for="item of corners" :key="item.id" :value="item.name">{{
+                    item.name
+                  }}</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div >
     </div>
 
     <ModalProduct
@@ -30,7 +48,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="item of products" :key="item.id">
+          <tr v-for="item of filtredProducts" :key="item.id">
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
@@ -73,6 +91,8 @@ export default {
     ModalProduct
   },
   data: () => ({
+    corners: null,
+    selectedCorner: null,
     products: null,
     modalProduct: null,
     isOpen: false,
@@ -90,7 +110,14 @@ export default {
       mods: []
     }
   }),
+  computed: {
+    filtredProducts(){
+      if(!this.products) return null
+      if(!this.selectedCorner) return this.products
 
+      return this.products.filter(product => product.corner === this.selectedCorner)
+    }
+  },
   methods: {
 
     groupName(id){
@@ -145,8 +172,11 @@ export default {
   },
   async mounted() {
     this.products = await this.$store.dispatch("getAllProducts", {});
+    this.corners = await this.$store.dispatch("getAllCorners", {});
     this.groups = await this.$store.dispatch("getAllGroups", {});
     this.mods = await this.$store.dispatch("getAllMods", {});
+    this.select3 = window.M.FormSelect.init(this.$refs.selectcorner);
+    window.M.updateTextFields();
   }
 };
 </script>

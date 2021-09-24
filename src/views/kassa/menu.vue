@@ -110,6 +110,11 @@ export default {
               id: "fob",
               name: "ФоБо",
               gate: "GATE C1"
+            },
+            {
+              id: "bus",
+              name: "Фуд Трак",
+              gate: "NOT_SHOW"
             }
           ];
         }

@@ -20,6 +20,7 @@ export default {
   data: () => ({
     links: [
       { title: "Смена", url: "/", exact: true },
+      { title: "Корнеры", url: "/corners" },
       { title: "Группы товаров", url: "/groups" },
       { title: "Товары", url: "/Products" },
       { title: "Модификаторы", url: "/Mods" },

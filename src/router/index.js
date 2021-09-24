@@ -20,6 +20,13 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Products.vue")
   },
   {
+    path: "/corners",
+    name: "Corners",
+    meta: { layout: "main" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Corners.vue")
+  },
+  {
     path: "/items",
     name: "Items",
     meta: { layout: "main" },

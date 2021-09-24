@@ -311,6 +311,11 @@ export default {
             name: "ФоБо",
             gate: "GATE C1"
           };
+        case "bus":
+          return {
+            name: "Фуд Трак",
+            gate: "NOT_SHOW"
+          };
         default:
           return {
             name: "ОБЩИЙ",
