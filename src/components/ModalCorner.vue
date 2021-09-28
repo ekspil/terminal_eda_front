@@ -6,10 +6,20 @@
   >
     <div class="card-content">
       <span class="card-title">Корнер</span>
-      <div class="input-field">
+      <div id="cornerName" class="input-field">
         <input id="name" type="text" class="validate" v-model="corner.name" />
         <label for="name">Имя</label>
         <small v-if="false" class="helper-text invalid">Name</small>
+      </div>
+      <div class="input-field">
+        <input id="uid" type="text" class="validate" v-model="corner.uid" />
+        <label for="uid">Пользовательское название</label>
+        <small v-if="false" class="helper-text invalid">User id</small>
+      </div>
+      <div class="input-field">
+        <input id="gate" type="text" class="validate" v-model="corner.gate" />
+        <label for="gate">Gate</label>
+        <small v-if="false" class="helper-text invalid">Gate</small>
       </div>
     </div>
     <div class="card-action">

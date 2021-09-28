@@ -3,24 +3,35 @@
     <div>
       <table>
         <tbody>
-        <tr class="page-title">
-          <td><h3 >Продукты</h3></td>
-          <td>
-            <div class="input-field" >
-              <select ref="selectcorner"  v-model="selectedCorner">
-                <option :value="null" selected>Все</option>
-                <option v-for="item of corners" :key="item.id" :value="item.name">{{
-                    item.name
-                  }}</option>
-              </select>
-            </div>
-          </td>
-        </tr>
+          <tr class="page-title">
+            <td><h3>Продукты</h3></td>
+            <td>
+              <div>
+                <label>
+                  <input type="checkbox" v-model="archive"/>
+                  <span>Показывать архивные записи</span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="input-field">
+                <select ref="selectcorner" v-model="selectedCorner">
+                  <option value="ALL" selected>Все</option>
+                  <option :value="null" selected>Без корнера</option>
+                  <option
+                    v-for="item of corners"
+                    :key="item.id"
+                    :value="item.name"
+                    >{{ item.name }}</option
+                  >
+                </select>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-    <div >
-    </div>
+    <div></div>
 
     <ModalProduct
       v-if="items && groups && products && mods && isOpen"
@@ -29,6 +40,7 @@
       :groups="groups"
       :product="product"
       :mods="mods"
+      :corners="corners"
     />
 
     <section v-if="products && groups">
@@ -48,7 +60,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="item of filtredProducts" :key="item.id">
+          <tr v-for="item of filtredProducts" :key="item.id" :class="{'transperent': item.archive}">
             <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
@@ -92,13 +104,14 @@ export default {
   },
   data: () => ({
     corners: null,
-    selectedCorner: null,
+    selectedCorner: "ALL",
     products: null,
     modalProduct: null,
     isOpen: false,
     items: null,
     groups: null,
     mods: null,
+    archive: false,
     product: {
       id: null,
       name: null,
@@ -107,35 +120,41 @@ export default {
       code: null,
       corner: "ALL",
       price: null,
-      mods: []
+      mods: [],
+      archive: null
     }
   }),
+  watch: {
+    async archive(nValue) {
+      this.products = await this.$store.dispatch("getAllProducts", {archive: nValue});
+    }
+  },
   computed: {
-    filtredProducts(){
-      if(!this.products) return null
-      if(!this.selectedCorner) return this.products
+    filtredProducts() {
+      if (!this.products) return null;
+      if (this.selectedCorner === "ALL") return this.products;
 
-      return this.products.filter(product => product.corner === this.selectedCorner)
+      return this.products.filter(
+        product => product.corner === this.selectedCorner
+      );
     }
   },
   methods: {
-
-    groupName(id){
-      const gr = this.groups.find(it => it.id === id)
-      if(!gr) return ""
-      return gr.name
+    groupName(id) {
+      const gr = this.groups.find(it => it.id === id);
+      if (!gr) return "";
+      return gr.name;
     },
     async del(item) {
-      item.action = "DELETE"
+      item.action = "DELETE";
       const ok = await this.$store.dispatch("saveProduct", item);
       if (ok) {
         this.products = await this.$store.dispatch("getAllProducts", {});
-        return
+        return;
       }
-      return ok
+      return ok;
     },
     async openModal(p) {
-
       if (!p) {
         this.product = {
           id: null,
@@ -145,6 +164,7 @@ export default {
           code: null,
           corner: "ALL",
           price: null,
+          archive: null,
           mods: []
         };
       } else {
@@ -171,7 +191,7 @@ export default {
     this.items = await this.$store.dispatch("getAllItems", {});
   },
   async mounted() {
-    this.products = await this.$store.dispatch("getAllProducts", {});
+    this.products = await this.$store.dispatch("getAllProducts", {archive: this.archive});
     this.corners = await this.$store.dispatch("getAllCorners", {});
     this.groups = await this.$store.dispatch("getAllGroups", {});
     this.mods = await this.$store.dispatch("getAllMods", {});
@@ -180,5 +200,10 @@ export default {
   }
 };
 </script>
+<style>
+.transperent {
+  opacity: 40%;
+}
+</style>
 
 <style scoped></style>

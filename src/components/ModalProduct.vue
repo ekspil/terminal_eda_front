@@ -28,8 +28,13 @@
         >
       </div>
       <div class="input-field">
-        <input type="text" v-model.trim="product.corner" />
-        <label for="pname">Корнер</label>
+        <select ref="selectcorner" v-model="product.corner">
+          <option :value="null" selected>Без корнера</option>
+          <option v-for="item of corners" :key="item.id" :value="item.name">{{
+              item.uid
+            }}</option>
+        </select>
+        <label>Выберете корнер</label>
       </div>
       <div class="input-field">
         <input
@@ -87,12 +92,13 @@
 <script>
 export default {
   name: "ModalP",
-  props: ["items", "product", "groups", "mods"],
+  props: ["items", "product", "groups", "mods", "corners"],
   data: () => ({
     modal: {},
     select: null,
     select2: null,
-    select3: null
+    select3: null,
+    select4: null,
   }),
   methods: {
     close() {
@@ -114,6 +120,7 @@ export default {
     this.select = window.M.FormSelect.init(this.$refs.selectprod);
     this.select2 = window.M.FormSelect.init(this.$refs.selectgroup);
     this.select3 = window.M.FormSelect.init(this.$refs.selectset);
+    this.select4 = window.M.FormSelect.init(this.$refs.selectcorner);
     window.M.updateTextFields();
   }
 };

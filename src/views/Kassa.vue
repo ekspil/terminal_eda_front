@@ -12,9 +12,10 @@
           @changeMod="changeMod"
         ></Postitons>
         <Menu
-          v-if="menu && groups && !modSelection && !actionKassa"
+          v-if="menu && groups  && corners && !modSelection && !actionKassa"
           :products="menu"
           :groups="groups"
+          :corners="corners"
           @addItem="addItem"
 
         ></Menu>
@@ -70,6 +71,7 @@ export default {
     this.mods = await this.$store.dispatch("getAllMods", {});
     this.menu = await this.$store.dispatch("getAllProducts", {});
     this.smena = await this.$store.dispatch("getLastSmena");
+    this.corners = await this.$store.dispatch("getAllCorners", {});
     const groups = await this.$store.dispatch("getAllGroups", {});
     this.groups = groups.map(i => {
       i.group = true;
@@ -86,6 +88,7 @@ export default {
     smena: {},
     mods: null,
     groups: null,
+    corners: null,
     selectedString: "",
     actionKassa: "",
     bill: {

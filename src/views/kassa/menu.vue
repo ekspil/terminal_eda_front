@@ -39,6 +39,12 @@ export default {
       default: () => {
         return [];
       }
+    },
+    corners: {
+      type: Array,
+      default: () => {
+        return [];
+      }
     }
   },
   data: () => ({
@@ -66,57 +72,18 @@ export default {
     }
   },
   computed: {
+    cornersConverted(){
+      return this.corners.map(corner => {
+        corner.id = corner.name
+        corner.name = corner.uid
+        return corner
+      })
+    },
     menu() {
 
       if (this.$route.params.corner === "KASSA") {
         if (!this.selectedCorner) {
-          return [
-            {
-              id: "dug",
-              name: "DOUGLAS",
-              gate: "GATE D1"
-            },
-            {
-              id: "bar",
-              name: "THE BAR",
-              gate: "GATE A1"
-            },
-            {
-              id: "com",
-              name: "КОМПОТ",
-              gate: "GATE D3"
-            },
-            {
-              id: "wok",
-              name: "WOK&TALK",
-              gate: "GATE D2"
-            },
-            {
-              id: "bim",
-              name: "BIBIMBAR",
-              gate: "GATE C2"
-            },
-            {
-              id: "pen",
-              name: "PENKA",
-              gate: "GATE B2"
-            },
-            {
-              id: "spa",
-              name: "SPAZIO",
-              gate: "GATE A2"
-            },
-            {
-              id: "fob",
-              name: "ФоБо",
-              gate: "GATE C1"
-            },
-            {
-              id: "bus",
-              name: "Фуд Трак",
-              gate: "NOT_SHOW"
-            }
-          ];
+          return this.cornersConverted
         }
         const filtredProducts = this.products.filter(prod => {
           if (prod.corner === this.selectedCorner) return true;

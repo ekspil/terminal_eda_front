@@ -54,10 +54,14 @@ export default {
         throw e;
       }
     },
-    async getAllProducts({ dispatch, commit }, { password }) {
+    async getAllProducts({ dispatch, commit }, { password , archive}) {
       try {
+        let url = "http://" + host + ":3000/api/terminal/products/get"
+        if(archive) {
+          url = url + "?archive=1"
+        }
         const result = await axios.get(
-          "http://" + host + ":3000/api/terminal/products/get"
+          url
         );
         return result.data;
       } catch (e) {

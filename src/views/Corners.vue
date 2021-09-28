@@ -13,6 +13,8 @@
           <tr>
             <th>#</th>
             <th>Имя</th>
+            <th>Для пользователя</th>
+            <th>Gate</th>
             <th>Редактировать</th>
             <th></th>
           </tr>
@@ -22,6 +24,8 @@
           <tr v-for="us of corners" :key="us.id">
             <td>{{ us.id }}</td>
             <td>{{ us.name }}</td>
+            <td>{{ us.uid }}</td>
+            <td>{{ us.gate }}</td>
             <td>
               <button class="btn-small btn" @click="openModal(us)">
                 <i class="material-icons">open_in_new</i>
@@ -59,6 +63,8 @@ export default {
     corner: {
       id: null,
       name: null,
+      uid: null,
+      gate: null,
     }
   }),
   methods: {
@@ -75,7 +81,9 @@ export default {
       if (!i) {
         this.corner = {
           id: null,
-          name: null
+          name: null,
+          uid: null,
+          gate: null,
         };
       } else {
         this.corner = i;
