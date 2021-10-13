@@ -557,7 +557,7 @@ export default {
           ...this.bill,
           kkmServer: this.$route.query.kkmServer
         });
-        if (!result.result || result.result.Error) {
+        if (!result.result || (result.result.Error && !result.result.Error.includes("Index was out of range"))) {
           alert(
             "Произошла ошибка или произведена отмена операции на терминале"
           );
