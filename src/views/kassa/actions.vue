@@ -647,7 +647,7 @@ export default {
       }
       this.action = "WAIT";
       const result = await this.payTerminal();
-      if (result.result.Error) {
+      if (result.result.Error && !result.result.Error.includes("Index was out of range")) {
         alert(
           "Произошла ошибка при оплате, либо оплата отменена пользователем!"
         );
