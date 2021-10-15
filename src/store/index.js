@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import auth from "./auth";
 import db from "./db"
 import order from "./order"
+import cache from "./cache"
 import kassa from "./kassa"
 import createPersistedState from "vuex-persistedstate";
 
@@ -14,6 +15,6 @@ export default new Vuex.Store({
   actions: {},
   plugins: [createPersistedState()],
   modules: {
-    auth, db, order, kassa
+    auth, db, order, kassa, cache
   }
 });

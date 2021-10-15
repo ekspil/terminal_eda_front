@@ -127,6 +127,13 @@ const routes = [
     meta: { layout: "no" },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Kassa.vue")
+  },
+  {
+    path: "/kassaSecondScreen",
+    name: "SecondScreen",
+    meta: { layout: "no" },
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/SecondScreen.vue")
   }
 ];
 

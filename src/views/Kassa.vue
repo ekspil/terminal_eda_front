@@ -12,12 +12,11 @@
           @changeMod="changeMod"
         ></Postitons>
         <Menu
-          v-if="menu && groups  && corners && !modSelection && !actionKassa"
+          v-if="menu && groups && corners && !modSelection && !actionKassa"
           :products="menu"
           :groups="groups"
           :corners="corners"
           @addItem="addItem"
-
         ></Menu>
         <ModSelector
           v-if="menu && modSelection && !actionKassa"
@@ -47,6 +46,7 @@
       </div>
     </div>
     <ModalConfirm></ModalConfirm>
+
   </div>
 </template>
 
@@ -56,6 +56,7 @@ import Actions from "@/views/kassa/actions";
 import Menu from "@/views/kassa/menu";
 import ModalConfirm from "@/views/kassa/modalConfirm";
 import ModSelector from "@/views/kassa/modSelector";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -67,6 +68,8 @@ export default {
     ModSelector
   },
   async mounted() {
+
+    //window.open("http://localhost:8082/kassaSecondScreen", '', 'fullscreen=yes,scrollbars=auto,menubar=no,toolbar=no,location=no,status=no,screenX=0,screenY=0,left=0,top=0');
     this.corner = this.$route.params.corner;
     this.mods = await this.$store.dispatch("getAllMods", {});
     this.menu = await this.$store.dispatch("getAllProducts", {});
@@ -77,9 +80,17 @@ export default {
       i.group = true;
       return i;
     });
+    localStorage.bill = JSON.stringify(this.bill);
   },
   sockets: {},
-  computed: {},
+  computed: {
+    billCache() {
+      return JSON.parse(localStorage.bill);
+    },
+    ...mapGetters({
+      getBill: "cache/getBill"
+    })
+  },
   data: () => ({
     modal: null,
     modSelection: null,
@@ -170,6 +181,7 @@ export default {
       this.bill.items = this.bill.items.filter(
         i => i.code !== this.selectedString
       );
+      localStorage.bill = JSON.stringify(this.bill);
     },
     plusString() {
       if (!this.selectedString) return;
@@ -177,6 +189,7 @@ export default {
         if (i.code == this.selectedString) i.count++;
         return i;
       });
+      localStorage.bill = JSON.stringify(this.bill);
     },
     minusString() {
       if (!this.selectedString) return;
@@ -192,6 +205,7 @@ export default {
         );
         this.selectedString = null;
       }
+      localStorage.bill = JSON.stringify(this.bill);
     },
     setString(string) {
       this.selectedString = string;
@@ -237,6 +251,7 @@ export default {
       for (let pos of result.items) {
         this.addItem(pos.item_id, pos);
       }
+      localStorage.bill = JSON.stringify(this.bill);
     },
     clear(notAsk) {
       if (!notAsk) {
@@ -251,10 +266,11 @@ export default {
         route: null,
         type: null
       };
-      if(!this.actionKassa.includes('RETURN')){
+      if (!this.actionKassa.includes("RETURN")) {
         this.actionKassa = "";
       }
       this.selectedString = "";
+      localStorage.bill = JSON.stringify(this.bill);
     },
     addItem(posId, position) {
       if (!this.bill || !this.bill.route) {
@@ -270,7 +286,10 @@ export default {
           finded = 1;
           return item;
         });
-        if (finded) return;
+        if (finded) {
+          localStorage.bill = JSON.stringify(this.bill);
+          return;
+        }
       }
 
       const prod = this.menu.find(item => {
@@ -308,6 +327,7 @@ export default {
       }
       if (!pushed.price) pushed.price = 0;
       this.bill.items.push(pushed);
+      localStorage.bill = JSON.stringify(this.bill);
       setTimeout(function() {
         const elem = document.getElementById("style-1");
         elem.scrollTop = elem.scrollHeight;
