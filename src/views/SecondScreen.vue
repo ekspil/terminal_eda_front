@@ -79,7 +79,7 @@ export default {
 }
 .terminal-bg {
   background-color: #3c3f41;
-  background-image: url(/terminal_bg.jpg);
+  background-image: url(/secondScreen.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
