@@ -316,6 +316,11 @@ export default {
             name: "Фуд Трак",
             gate: "NOT_SHOW"
           };
+        case "ter":
+          return {
+            name: "TERMINAL",
+            gate: "XX"
+          };
         default:
           return {
             name: "ОБЩИЙ",
